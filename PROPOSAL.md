@@ -2,13 +2,13 @@
 
 ## Group Members:
 
-names here.(CHANGE THIS!!!!!)
+Bogdan Sotnikov and Wesley Leon
        
 # IDEAS:
 
-1 statement of the problem you are solving and/or a high level description of the project. (CHANGE THIS!!!!!)
+1 Platformer in the style of super mario. A knight traverses a magical forest to defeat an evil wizard. Knight can block attacks with a shield and attack with a sword. 3 medium size levels.
 
-2 statement of the problem you are solving and/or a high level description of the project. (CHANGE THIS!!!!!)
+2 Rhythm game about elves defending themselves in a forest. The 4 elves all belong to a band, and use instruments to defeat enemies. The enemies appear such that it matches the beat of a song. Hit the keys on time to get a score. 3 songs.
 
-3 statement of the problem you are solving and/or a high level description of the project. (CHANGE THIS!!!!!)
+3 2-player chess.
 
