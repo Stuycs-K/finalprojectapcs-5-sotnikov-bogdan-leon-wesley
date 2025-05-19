@@ -1,11 +1,10 @@
 
 # Technical Details:
 
-(CHANGE THIS!!!!!)
+PERIOD 5
+Wesley Leon and Bogdan Sotnikov
+Team name: "Team Name"
 
-A description of your technical design. This should include: 
-   
-How you will be using the topics covered in class in the project.
      
 # Project Design
 
