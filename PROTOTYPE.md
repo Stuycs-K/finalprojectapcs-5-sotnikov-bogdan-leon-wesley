@@ -7,7 +7,32 @@ Team name: "Team Name"
 
      
 # Project Design
+```mermaid
+classDiagram
+Note: + Audio
+Note: + onPlay()
+    Character <|-- Flute
+    Character <|-- Drums
+    Character <|-- Guitar
+    Character <|-- Guitar 2
+    Character : +Keycode Keybind
+    Character : +Keycode Keybind
+    Character : + Note Note
+    Character: +onKeyPressed()
+    Character: +playNote()
+    class Flute{
 
+    }
+    class Drums{
+    
+    }
+    class Guitar{
+
+    }
+    class Guitar2{
+
+    }
+```
 UML Diagrams and descriptions of key algorithms, classes, and how things fit together.
 
 Four characters at center
