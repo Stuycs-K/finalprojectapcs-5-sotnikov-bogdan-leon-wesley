@@ -15,7 +15,7 @@ class Entity
     pos[1] = yPos;
     center[0] = xCen;
     center[1] = yCen;
-    clamp(center);
+    Utils.clamp(center);
     clamp(pos);
   }
   public Entity(PImage[][] sprites, int xPos, int yPos)

@@ -1,4 +1,4 @@
-final class Utils
+class Utils
 {
   public void clamp (int[] pos)
   {
