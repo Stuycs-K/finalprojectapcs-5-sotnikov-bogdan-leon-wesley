@@ -11,6 +11,7 @@ int speed = 5;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg;
+int score = 0;
 
 void setup() {
   size(960, 540);
@@ -92,6 +93,7 @@ void createHitZoneAndCheck(NotePlayer player, int dx, int dy, char pressedKey) {
   ArrayList<Note> notes = player.getNotes();
   for (Note n : notes) {
     if (!n.isHit() && n.intersects(zone)) {
+      score += n.calculateScore(zone);
       n.hit(pressedKey);
       break;
     }
