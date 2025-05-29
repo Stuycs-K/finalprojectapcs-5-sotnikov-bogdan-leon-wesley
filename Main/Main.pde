@@ -12,6 +12,10 @@ HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg;
 int score = 0;
+PImage[][] drummerSprites;
+PImage[][] flautistSprites;
+PImage[][] lutistSprites;
+PImage[][] harpistSprites;
 
 void setup() {
   size(960, 540);
@@ -23,20 +27,36 @@ void setup() {
     dummySprites[0][0].pixels[i] = color(255, 0, 0);
   }
   dummySprites[0][0].updatePixels();
-  
-  
+
+  setupAnim()
   
   int centerX = width /2;
   int centerY = height/2;
   centerPoint = new Entity(this, dummySprites, centerX + 8, centerY + 8, 32, 32);
   
   Song = getSong("bad apple");
-  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[0], speed, dummySprites, "C Note.wav", centerX, centerY - 300);
-  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[1], speed, dummySprites, "C Note.wav", centerX,  centerY + 300);
-  leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[2], speed, dummySprites, "C Note.wav", centerX - 300,  centerY);
-  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[3], speed, dummySprites, "C Note.wav", centerX + 300,  centerY);
+  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[0], speed, harpistSprites, "C Note.wav", centerX, centerY - 300);
+  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[1], speed, lutistSprites, "C Note.wav", centerX,  centerY + 300);
+  leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[2], speed, flautistSprites, "C Note.wav", centerX - 300,  centerY);
+  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[3], speed, drummerSprites, "C Note.wav", centerX + 300,  centerY);
 
   frameRate(60);
+}
+
+void setupAnim()
+{
+  ArrayList<PImage[]> DrummerSprites = new ArrayList<PImage[]>();
+  DrummerSprites.add(loadImagesFromFolder(sketchPath("data/Drummer/Idle")));
+  DrummerSprites.add(loadImagesFromFolder(sketchPath("data/Drummer/Stomp")));
+  ArrayList<PImage[]> FlautistSprites = new ArrayList<PImage[]>();
+  FlautistSprites.add(loadImagesFromFolder(sketchPath("data/Flautist/Idle")));
+  FlautistSprites.add(loadImagesFromFolder(sketchPath("data/Flautist/Stomp")));
+  ArrayList<PImage[]> LutistSprites = new ArrayList<PImage[]>();
+  LutistSprites.add(loadImagesFromFolder(sketchPath("data/Lutist/Idle")));
+  LutistSprites.add(loadImagesFromFolder(sketchPath("data/Lutist/Stomp")));
+  ArrayList<PImage[]> HarpistSprites = new ArrayList<PImage[]>();
+  HarpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Idle")));
+  HarpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Stomp")));
 }
 
 void draw() {
@@ -59,6 +79,7 @@ void draw() {
     z.drawHitbox(this);
   }
   hitZones.clear();
+  print(score);
 }
 void keyPressed() {
   keysDown.add((int)keyCode);
