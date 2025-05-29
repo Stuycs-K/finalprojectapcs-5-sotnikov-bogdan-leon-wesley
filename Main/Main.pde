@@ -127,7 +127,7 @@ PImage[] loadImagesFromFolder(String path) {
 
 int[][] getSong(String path) {
     try {
-        Scanner scanner = new Scanner(new File(path));
+        Scanner scanner = new Scanner(new File(sketchPath("data/Songs/" + path)));
         
         int len = scanner.nextInt();
         int[][] song = new int[4][len];
