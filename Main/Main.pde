@@ -10,9 +10,11 @@ int[][] Song;
 int speed = 5;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
+PImage bg;
 
 void setup() {
   size(960, 540);
+  bg = loadImage(sketchPath("data/Background.png"));
   dummySprites = new PImage[1][1];
   dummySprites[0][0] = createImage(32, 32, RGB);
   dummySprites[0][0].loadPixels();
@@ -37,7 +39,7 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  image(bg, 0, 0);
 
   topPlayer.update();
   bottomPlayer.update();
