@@ -50,6 +50,10 @@ class Note extends Entity {
   public void hit(char type) {
     hit();
   }
+  public int calculateScore(Note other)
+  {  
+    return 1000 / Math.abs((pos[0] - other.getX())) + 1000 / Math.abs((pos[1] - other.getY()))
+  }
 
   public boolean isHit() {
     return isHit;
