@@ -66,7 +66,7 @@ void setupAnim()
 
 void draw() {
   image(bg, 0, 0);
-
+  
   topPlayer.update();
   bottomPlayer.update();
   leftPlayer.update();
@@ -76,8 +76,6 @@ void draw() {
   checkCenterHits(bottomPlayer);
   checkCenterHits(leftPlayer);
   checkCenterHits(rightPlayer);
-
-  checkDirectionalHits();
   centerPoint.drawSprite();
   centerPoint.drawHitbox(this);
   for (Entity z : hitZones) {
@@ -95,11 +93,10 @@ void draw() {
 }
 void keyPressed() {
   keysDown.add((int)keyCode);
-}
-
-void keyReleased() {
+  checkDirectionalHits();
   keysDown.remove((int)keyCode);
 }
+
 
 void checkDirectionalHits() {
   if (keysDown.contains((int)'W') || keysDown.contains(UP)) {
@@ -120,7 +117,7 @@ void createHitZoneAndCheck(NotePlayer player, int dx, int dy, char pressedKey) {
   int x = centerPoint.getX() + dx * height /4;
   int y = centerPoint.getY() + dy * height /4;
 
-  Entity zone = new Entity(this, dummySprites, x, y, 48, 48);
+  Entity zone = new Entity(this, dummySprites, x, y, 128, 128);
   hitZones.add(zone);
 
   ArrayList<Note> notes = player.getNotes();
