@@ -8,4 +8,5 @@ We planned and laid down some base sketches for the background and the character
 ### 2025-05-28 - Sprites
 Made sprites for the player characters and background.
 
-### 2025-05-29 -
+### 2025-05-29 - Art
+Implementation of sprites and got music for the game.
