@@ -10,7 +10,7 @@ int[][] Song;
 int speed = 5;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
-PImage bg;
+PImage bg, bgo;
 int score = 0;
 PImage[][] drummerSprites;
 PImage[][] flautistSprites;
@@ -20,6 +20,7 @@ PImage[][] harpistSprites;
 void setup() {
   size(960, 540);
   bg = loadImage(sketchPath("data/Background.png"));
+  bgo = loadImage(sketchPath("data/BackgroundOverlay.png"));
   dummySprites = new PImage[1][1];
   dummySprites[0][0] = createImage(32, 32, RGB);
   dummySprites[0][0].loadPixels();
@@ -28,7 +29,7 @@ void setup() {
   }
   dummySprites[0][0].updatePixels();
 
-  setupAnim()
+  setupAnim();
   
   int centerX = width /2;
   int centerY = height/2;
@@ -79,6 +80,7 @@ void draw() {
     z.drawHitbox(this);
   }
   hitZones.clear();
+  image(bgo, 0, 0);
   print(score);
 }
 void keyPressed() {
