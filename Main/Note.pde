@@ -52,7 +52,7 @@ class Note extends Entity {
   }
   public int calculateScore(Entity other)
   {  
-    return 1000 / Math.abs((pos[0] - other.getX())) + 1000 / Math.abs((pos[1] - other.getY()));
+    return 1000 / (Math.abs((pos[0] - other.getX())) +1) + 1000 / (Math.abs((pos[1] - other.getY())) +1);
   }
 
   public boolean isHit() {

@@ -25,8 +25,7 @@ class NotePlayer {
 
     for (int f : spawnFrames) {
       if (f == currentFrame) {
-        Note n = new Note(applet, sprites, startX, startY, 16, 16, soundFile);
-        n.setHitboxSize(32, 32);
+        Note n = new Note(applet, sprites, startX, startY, 128, 128, soundFile);
         notes.add(n);
       }
     }
@@ -37,6 +36,7 @@ class NotePlayer {
         n.move(direction[0] * speed, direction[1] * speed);
       }
       n.drawSprite();
+      n.drawHitbox(applet);
 
       if (n.isFinished()) {
         notes.remove(i);

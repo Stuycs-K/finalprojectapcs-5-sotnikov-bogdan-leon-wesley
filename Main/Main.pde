@@ -12,13 +12,12 @@ HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg, bgo;
 int score = 0;
-ArrayList<PImage[]> drummerSprites;
-ArrayList<PImage[]> flautistSprites;
-ArrayList<PImage[]> lutistSprites;
-ArrayList<PImage[]> harpistSprites;
+ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites;
+Entity drummer, flautist, harpist, lutist;
 
 void setup() {
-  size(960, 540);
+  //size(1920, 1080);
+  fullScreen();
   bg = loadImage(sketchPath("data/Background.png"));
   bgo = loadImage(sketchPath("data/BackgroundOverlay.png"));
   dummySprites = new ArrayList<PImage[]>();
@@ -33,13 +32,18 @@ void setup() {
   
   int centerX = width /2;
   int centerY = height/2;
-  centerPoint = new Entity(this, dummySprites, centerX + 8, centerY + 8, 32, 32);
+  centerPoint = new Entity(this, dummySprites, centerX, centerY + 8, 256, 256);
+  drummer = new Entity(this, drummerSprites, centerX + 96, centerY + 8, 128, 128);
+  flautist = new Entity(this, flautistSprites, centerX - 96, centerY + 8, 128, 128);
+  harpist = new Entity(this, harpistSprites, centerX + 8, centerY - 96, 128, 128);
+  lutist = new Entity(this, lutistSprites, centerX + 8, centerY + 96, 128, 128);
+  
   
   Song = getSong("bad apple");
-  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[0], speed, harpistSprites, "C Note.wav", centerX, centerY - 300);
-  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[1], speed, lutistSprites, "C Note.wav", centerX,  centerY + 300);
-  leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[2], speed, flautistSprites, "C Note.wav", centerX - 300,  centerY);
-  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[3], speed, drummerSprites, "C Note.wav", centerX + 300,  centerY);
+  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[0], speed, harpistSprites, "C Note.wav", centerX + 8, centerY  - height /2);
+  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[1], speed, lutistSprites, "C Note.wav", centerX + 8,  centerY + height /2);
+  leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[2], speed, flautistSprites, "C Note.wav", centerX  - height /2,  centerY + 8);
+  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[3], speed, drummerSprites, "C Note.wav", centerX + height /2,  centerY + 8);
 
   frameRate(60);
 }
@@ -79,6 +83,12 @@ void draw() {
   for (Entity z : hitZones) {
     z.drawHitbox(this);
   }
+  
+  harpist.drawSprite();
+  drummer.drawSprite();
+  flautist.drawSprite();
+  lutist.drawSprite();
+  
   hitZones.clear();
   image(bgo, 0, 0);
   print(score);
@@ -107,8 +117,8 @@ void checkDirectionalHits() {
 }
 
 void createHitZoneAndCheck(NotePlayer player, int dx, int dy, char pressedKey) {
-  int x = centerPoint.getX() + dx * 100;
-  int y = centerPoint.getY() + dy * 100;
+  int x = centerPoint.getX() + dx * height /4;
+  int y = centerPoint.getY() + dy * height /4;
 
   Entity zone = new Entity(this, dummySprites, x, y, 48, 48);
   hitZones.add(zone);
