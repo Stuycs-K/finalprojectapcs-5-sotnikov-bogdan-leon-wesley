@@ -5,11 +5,11 @@ class NotePlayer {
   int[] spawnFrames;
   int currentFrame = 0;
   ArrayList<Note> notes = new ArrayList<Note>();
-  PImage[][] sprites;
+  ArrayList<PImage[]> sprites;
   String soundFile;
   int startX, startY;
 
-  NotePlayer(PApplet applet, int[] direction, int[] spawnFrames, int speed, PImage[][] sprites, String soundFile, int startX, int startY) {
+  NotePlayer(PApplet applet, int[] direction, int[] spawnFrames, int speed, ArrayList<PImage[]> sprites, String soundFile, int startX, int startY) {
     this.applet = applet;
     this.direction = direction;
     this.spawnFrames = spawnFrames;

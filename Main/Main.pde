@@ -5,30 +5,30 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 NotePlayer topPlayer, bottomPlayer, leftPlayer, rightPlayer;
 Entity centerPoint;
-PImage[][] dummySprites;
+ArrayList<PImage[]> dummySprites;
 int[][] Song;
 int speed = 5;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg;
 int score = 0;
-PImage[][] drummerSprites;
-PImage[][] flautistSprites;
-PImage[][] lutistSprites;
-PImage[][] harpistSprites;
+ArrayList<PImage[]> drummerSprites;
+ArrayList<PImage[]> flautistSprites;
+ArrayList<PImage[]> lutistSprites;
+ArrayList<PImage[]> harpistSprites;
 
 void setup() {
   size(960, 540);
   bg = loadImage(sketchPath("data/Background.png"));
-  dummySprites = new PImage[1][1];
-  dummySprites[0][0] = createImage(32, 32, RGB);
-  dummySprites[0][0].loadPixels();
-  for (int i = 0; i < dummySprites[0][0].pixels.length; i++) {
-    dummySprites[0][0].pixels[i] = color(255, 0, 0);
+  dummySprites = new ArrayList<PImage[]>();
+  dummySprites.add( new PImage[] {createImage(32, 32, RGB)});
+  dummySprites.get(0)[0].loadPixels();
+  for (int i = 0; i < dummySprites.get(0)[0].pixels.length; i++) {
+    dummySprites.get(0)[0].pixels[i] = color(255, 0, 0);
   }
-  dummySprites[0][0].updatePixels();
+  dummySprites.get(0)[0].updatePixels();
 
-  setupAnim()
+  setupAnim();
   
   int centerX = width /2;
   int centerY = height/2;

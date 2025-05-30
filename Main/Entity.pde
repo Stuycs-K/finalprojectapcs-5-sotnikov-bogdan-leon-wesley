@@ -3,7 +3,7 @@ class Entity {
   
   protected int[] pos = new int[2];
   protected int[] center = new int[2];
-  protected PImage[][] frames;
+  protected ArrayList<PImage[]> frames;
   protected int anims;
   protected int curAnim = 0;
   protected int curSprite;
@@ -18,10 +18,10 @@ class Entity {
 
   // Constructors
 
-  Entity(PApplet applet, PImage[][] sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
+  Entity(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
     this.applet = applet;  // save PApplet
     frames = sprites;
-    anims = sprites.length;
+    anims = sprites.size();
     pos[0] = xPos;
     pos[1] = yPos;
     this.hitboxWidth = hitboxWidth;
@@ -30,11 +30,11 @@ class Entity {
     center[1] = hitboxHeight / 2;
   }
 
-  Entity(PApplet applet, PImage[][] sprites, int xPos, int yPos) {
+  Entity(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos) {
     this(applet, sprites, xPos, yPos, 0, 0);
   }
 
-  Entity(PApplet applet, PImage[][] sprites) {
+  Entity(PApplet applet, ArrayList<PImage[]> sprites) {
     this(applet, sprites, 0, 0);
   }
 
@@ -87,10 +87,10 @@ class Entity {
       frameCounter = 0;
     }
 
-    image(frames[anim][curSprite], pos[0] - center[0], pos[1] - center[1]);
+    image(frames.get(anim)[curSprite], pos[0] - center[0], pos[1] - center[1]);
     frameCounter++;
     if (frameCounter >= frameDelay) {
-      curSprite = (curSprite + 1) % frames[anim].length;
+      curSprite = (curSprite + 1) % frames.get(anim).length;
       frameCounter = 0;
     }
   }
