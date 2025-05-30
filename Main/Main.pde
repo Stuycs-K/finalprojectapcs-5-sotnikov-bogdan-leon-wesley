@@ -13,6 +13,7 @@ ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg, bgo;
 int score = 0;
 ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites;
+Entity[] sigils;
 Entity drummer, flautist, harpist, lutist;
 
 void setup() {
@@ -38,12 +39,21 @@ void setup() {
   harpist = new Entity(this, harpistSprites, centerX + 8, centerY - 96, 128, 128);
   lutist = new Entity(this, lutistSprites, centerX + 8, centerY + 96, 128, 128);
   
+  drummer.setFrameDelay(20);
+  flautist.setFrameDelay(20);
+  harpist.setFrameDelay(20);
+  lutist.setFrameDelay(20);
   
   Song = getSong("bad apple");
   topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[0], speed, harpistSprites, "C Note.wav", centerX + 8, centerY  - height /2);
   bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[1], speed, lutistSprites, "C Note.wav", centerX + 8,  centerY + height /2);
   leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[2], speed, flautistSprites, "C Note.wav", centerX  - height /2,  centerY + 8);
   rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[3], speed, drummerSprites, "C Note.wav", centerX + height /2,  centerY + 8);
+  
+    int x = centerPoint.getX() + dx * height /4;
+  int y = centerPoint.getY() + dy * height /4;
+
+  Entity zone = new Entity(this, dummySprites, x, y, 128, 128);
 
   frameRate(60);
 }
