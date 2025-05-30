@@ -5,29 +5,29 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 NotePlayer topPlayer, bottomPlayer, leftPlayer, rightPlayer;
 Entity centerPoint;
-PImage[][] dummySprites;
+ArrayList<PImage[]> dummySprites;
 int[][] Song;
 int speed = 5;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg, bgo;
 int score = 0;
-PImage[][] drummerSprites;
-PImage[][] flautistSprites;
-PImage[][] lutistSprites;
-PImage[][] harpistSprites;
+ArrayList<PImage[]> drummerSprites;
+ArrayList<PImage[]> flautistSprites;
+ArrayList<PImage[]> lutistSprites;
+ArrayList<PImage[]> harpistSprites;
 
 void setup() {
   size(960, 540);
   bg = loadImage(sketchPath("data/Background.png"));
   bgo = loadImage(sketchPath("data/BackgroundOverlay.png"));
-  dummySprites = new PImage[1][1];
-  dummySprites[0][0] = createImage(32, 32, RGB);
-  dummySprites[0][0].loadPixels();
-  for (int i = 0; i < dummySprites[0][0].pixels.length; i++) {
-    dummySprites[0][0].pixels[i] = color(255, 0, 0);
+  dummySprites = new ArrayList<PImage[]>();
+  dummySprites.add( new PImage[] {createImage(32, 32, RGB)});
+  dummySprites.get(0)[0].loadPixels();
+  for (int i = 0; i < dummySprites.get(0)[0].pixels.length; i++) {
+    dummySprites.get(0)[0].pixels[i] = color(255, 0, 0);
   }
-  dummySprites[0][0].updatePixels();
+  dummySprites.get(0)[0].updatePixels();
 
   setupAnim();
   
@@ -46,18 +46,18 @@ void setup() {
 
 void setupAnim()
 {
-  ArrayList<PImage[]> DrummerSprites = new ArrayList<PImage[]>();
-  DrummerSprites.add(loadImagesFromFolder(sketchPath("data/Drummer/Idle")));
-  DrummerSprites.add(loadImagesFromFolder(sketchPath("data/Drummer/Stomp")));
-  ArrayList<PImage[]> FlautistSprites = new ArrayList<PImage[]>();
-  FlautistSprites.add(loadImagesFromFolder(sketchPath("data/Flautist/Idle")));
-  FlautistSprites.add(loadImagesFromFolder(sketchPath("data/Flautist/Stomp")));
-  ArrayList<PImage[]> LutistSprites = new ArrayList<PImage[]>();
-  LutistSprites.add(loadImagesFromFolder(sketchPath("data/Lutist/Idle")));
-  LutistSprites.add(loadImagesFromFolder(sketchPath("data/Lutist/Stomp")));
-  ArrayList<PImage[]> HarpistSprites = new ArrayList<PImage[]>();
-  HarpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Idle")));
-  HarpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Stomp")));
+  drummerSprites = new ArrayList<PImage[]>();
+  drummerSprites.add(loadImagesFromFolder(sketchPath("data/Drummer/Idle")));
+  drummerSprites.add(loadImagesFromFolder(sketchPath("data/Drummer/Atk1")));
+  flautistSprites = new ArrayList<PImage[]>();
+  flautistSprites.add(loadImagesFromFolder(sketchPath("data/Flautist/Idle")));
+  flautistSprites.add(loadImagesFromFolder(sketchPath("data/Flautist/Atk1")));
+  lutistSprites = new ArrayList<PImage[]>();
+  lutistSprites.add(loadImagesFromFolder(sketchPath("data/Lutist/Idle")));
+  lutistSprites.add(loadImagesFromFolder(sketchPath("data/Lutist/Atk1")));
+  harpistSprites = new ArrayList<PImage[]>();
+  harpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Idle")));
+  harpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Atk1")));
 }
 
 void draw() {

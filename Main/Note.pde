@@ -6,12 +6,12 @@ class Note extends Entity {
   private int hitAnimIndex = 0;
   
 
-  Note(PApplet applet, PImage[][] sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight, String soundFilePath) {
+  Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight, String soundFilePath) {
     super(applet, sprites, xPos, yPos, hitboxWidth, hitboxHeight);
     sound = new SoundFile(applet, soundFilePath);
   }
 
-  Note(PApplet applet, PImage[][] sprites, int xPos, int yPos, String soundFilePath) {
+  Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, String soundFilePath) {
     this(applet, sprites, xPos, yPos, 0, 0, soundFilePath);
   }
 
@@ -23,11 +23,11 @@ class Note extends Entity {
   @Override
   public void drawSprite() {
     if (isHit) {
-      if (curSprite >= frames[curAnim].length) {
-        curSprite = frames[curAnim].length - 1;
+      if (curSprite >= frames.get(curAnim).length) {
+        curSprite = frames.get(curAnim).length - 1;
         isFinished = true;
       }
-      applet.image(frames[curAnim][curSprite], pos[0] - center[0], pos[1] - center[1]);
+      applet.image(frames.get(curAnim)[curSprite], pos[0] - center[0], pos[1] - center[1]);
       frameCounter++;
       if (frameCounter >= frameDelay) {
         curSprite++;
