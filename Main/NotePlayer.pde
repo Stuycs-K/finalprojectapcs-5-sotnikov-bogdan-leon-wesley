@@ -4,6 +4,7 @@ class NotePlayer {
   int speed;
   int[] spawnFrames;
   int currentFrame = 0;
+  int framesPlayed = 0;
   ArrayList<Note> notes = new ArrayList<Note>();
   ArrayList<PImage[]> sprites;
   String soundFile;
@@ -22,13 +23,18 @@ class NotePlayer {
 
   void update() {
     currentFrame++;
-
-    for (int f : spawnFrames) {
-      if (f == currentFrame) {
+    
+    if (framesPlayed < spawnFrames.length && spawnFrames[framesPlayed] <= currentFrame)
+    {
+      if (spawnFrames[framesPlayed] > 0)
+      {
         Note n = new Note(applet, sprites, startX, startY, 128, 128, soundFile);
         notes.add(n);
       }
+       
+      framesPlayed++;
     }
+    
 
     for (int i = notes.size() - 1; i >= 0; i--) {
       Note n = notes.get(i);

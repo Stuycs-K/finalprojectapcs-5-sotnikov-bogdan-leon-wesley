@@ -7,7 +7,7 @@ NotePlayer topPlayer, bottomPlayer, leftPlayer, rightPlayer;
 Entity centerPoint;
 ArrayList<PImage[]> dummySprites;
 int[][] Song;
-int speed = 5;
+int speed = 2;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg, bgo;
@@ -15,10 +15,10 @@ int score = 0;
 ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites;
 Entity[] sigils;
 Entity drummer, flautist, harpist, lutist;
-
+SoundFile SongAudio;
 void setup() {
-  //size(1920, 1080);
-  fullScreen();
+  size(1920, 1080);
+  //fullScreen();
   bg = loadImage(sketchPath("data/Background.png"));
   bgo = loadImage(sketchPath("data/BackgroundOverlay.png"));
   dummySprites = new ArrayList<PImage[]>();
@@ -33,28 +33,37 @@ void setup() {
   
   int centerX = width /2;
   int centerY = height/2;
-  centerPoint = new Entity(this, dummySprites, centerX, centerY + 8, 256, 256);
-  drummer = new Entity(this, drummerSprites, centerX + 96, centerY + 8, 128, 128);
-  flautist = new Entity(this, flautistSprites, centerX - 96, centerY + 8, 128, 128);
-  harpist = new Entity(this, harpistSprites, centerX + 8, centerY - 96, 128, 128);
-  lutist = new Entity(this, lutistSprites, centerX + 8, centerY + 96, 128, 128);
+  centerPoint = new Entity(this, dummySprites, centerX, centerY , 256, 256);
+  drummer = new Entity(this, drummerSprites, centerX + 96, centerY, 128, 128);
+  flautist = new Entity(this, flautistSprites, centerX -96 , centerY, 128, 128);
+  harpist = new Entity(this, harpistSprites, centerX , centerY - 96, 128, 128);
+  lutist = new Entity(this, lutistSprites, centerX, centerY + 96, 128, 128);
   
   drummer.setFrameDelay(20);
   flautist.setFrameDelay(20);
   harpist.setFrameDelay(20);
   lutist.setFrameDelay(20);
   
-  Song = getSong("bad apple");
-  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[0], speed, harpistSprites, "C Note.wav", centerX + 8, centerY  - height /2);
-  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[1], speed, lutistSprites, "C Note.wav", centerX + 8,  centerY + height /2);
-  leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[2], speed, flautistSprites, "C Note.wav", centerX  - height /2,  centerY + 8);
-  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[3], speed, drummerSprites, "C Note.wav", centerX + height /2,  centerY + 8);
+  SongAudio = new SoundFile(this, sketchPath("data/SongAudio/ksi.mp3"));
+  SongAudio.play();
+  Song = getSong("ksi.txt");
+  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, harpistSprites, "C Note.wav", centerX , centerY  - height /2);
+  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, "C Note.wav", centerX ,  centerY + height /2);
+  leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, "C Note.wav", centerX  - height /2,  centerY );
+  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[2  ], speed, drummerSprites, "C Note.wav", centerX + height /2,  centerY );
   
-    int x = centerPoint.getX() + dx * height /4;
-  int y = centerPoint.getY() + dy * height /4;
 
-  Entity zone = new Entity(this, dummySprites, x, y, 128, 128);
-
+  
+  int offset = height/4;
+  ArrayList<PImage[]> sigil = new ArrayList<PImage[]>();
+  sigil.add(loadImagesFromFolder(sketchPath("data/Sigils")));
+  sigils = new Entity[4];
+  sigils[0] = new Entity(this, sigil, centerX  + offset, centerY , 128, 128);
+  sigils[1] = new Entity(this, sigil, centerX  - offset, centerY  , 128, 128);
+  sigils[2] = new Entity(this, sigil, centerX  , centerY  - offset, 128, 128);
+  sigils[3] = new Entity(this, sigil, centerX  , centerY + offset, 128, 128);
+  
+  
   frameRate(60);
 }
 
@@ -97,9 +106,13 @@ void draw() {
   flautist.drawSprite();
   lutist.drawSprite();
   
+  for (Entity m : sigils)
+  {
+    m.drawSprite();
+  }
+  
   hitZones.clear();
   image(bgo, 0, 0);
-  print(score);
 }
 void keyPressed() {
   keysDown.add((int)keyCode);
@@ -170,26 +183,19 @@ PImage[] loadImagesFromFolder(String path) {
 }
 
 int[][] getSong(String path) {
-    try {
-        Scanner scanner = new Scanner(new File(sketchPath("data/Songs/" + path)));
-        
-        int len = scanner.nextInt();
-        int[][] song = new int[4][len];
-        for (int i = 0; i < len; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (scanner.hasNextInt()) {
-                    song[j][i] = scanner.nextInt();
-                } else {
-                    song[j][i] = 0;
-                }
-            }
-        }
+  File folder = new File(sketchPath("data/Songs/" + path));
+  String[] lines = loadStrings(folder);
+  int[][] lanes = new int[4][];
 
-        scanner.close();
-        return song;
-
-    } catch (FileNotFoundException e) {
-        e.printStackTrace();
-        return new int[4][0];
+  for (int i = 0; i < 4; i++) {
+    Scanner sc = new Scanner(lines[i]);
+    int count = sc.nextInt();
+    lanes[i] = new int[count];
+    for (int j = 0; j < count; j++) {
+      lanes[i][j] = sc.nextInt() - height * 3/ (4 * speed);
     }
+    sc.close();
+  }
+
+  return lanes;
 }
