@@ -44,9 +44,9 @@ void setup() {
   harpist.setFrameDelay(20);
   lutist.setFrameDelay(20);
   
-  SongAudio = new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3"));
+  SongAudio = new SoundFile(this, sketchPath("data/SongAudio/Prokofiev.mp3"));
   SongAudio.play();
-  Song = getSong("BadApple.txt");
+  Song = getSong("Prokofiev.txt");
   topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, harpistSprites, "C Note.wav", centerX , centerY  - height /2);
   bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, "C Note.wav", centerX ,  centerY + height /2);
   leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, "C Note.wav", centerX  - height /2,  centerY );
