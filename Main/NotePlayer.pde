@@ -7,16 +7,14 @@ class NotePlayer {
   int framesPlayed = 0;
   ArrayList<Note> notes = new ArrayList<Note>();
   ArrayList<PImage[]> sprites;
-  String soundFile;
   int startX, startY;
 
-  NotePlayer(PApplet applet, int[] direction, int[] spawnFrames, int speed, ArrayList<PImage[]> sprites, String soundFile, int startX, int startY) {
+  NotePlayer(PApplet applet, int[] direction, int[] spawnFrames, int speed, ArrayList<PImage[]> sprites, int startX, int startY) {
     this.applet = applet;
     this.direction = direction;
     this.spawnFrames = spawnFrames;
     this.speed = speed;
     this.sprites = sprites;
-    this.soundFile = soundFile;
     this.startX = startX;
     this.startY = startY;
   }
@@ -28,7 +26,7 @@ class NotePlayer {
     {
       if (spawnFrames[framesPlayed] > 0)
       {
-        Note n = new Note(applet, sprites, startX, startY, 128, 128, soundFile);
+        Note n = new Note(applet, sprites, startX, startY, 128, 128);
         notes.add(n);
       }
        

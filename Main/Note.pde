@@ -1,18 +1,16 @@
 import processing.sound.SoundFile;
 class Note extends Entity {
-  private SoundFile sound;
   private boolean isHit = false;
   private boolean isFinished = false;
   private int hitAnimIndex = 0;
   
 
-  Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight, String soundFilePath) {
+  Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
     super(applet, sprites, xPos, yPos, hitboxWidth, hitboxHeight);
-    sound = new SoundFile(applet, soundFilePath);
   }
 
-  Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, String soundFilePath) {
-    this(applet, sprites, xPos, yPos, 0, 0, soundFilePath);
+  Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos) {
+    this(applet, sprites, xPos, yPos, 0, 0);
   }
 
   public void setHitboxSize(int w, int h) {
@@ -41,7 +39,6 @@ class Note extends Entity {
   public void hit() {
     if (!isHit) {
       isHit = true;
-      playSound();
       curAnim = hitAnimIndex;
       curSprite = 0;
       frameCounter = 0;
@@ -61,11 +58,5 @@ class Note extends Entity {
 
   public boolean isFinished() {
     return isFinished;
-  }
-
-  public void playSound() {
-    if (sound != null) {
-      sound.play();
-    }
   }
 }
