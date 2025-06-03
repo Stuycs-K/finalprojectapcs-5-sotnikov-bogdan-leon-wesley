@@ -12,10 +12,12 @@ HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg, bgo, crystal;
 int score = 0;
-ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites;
+ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites, enemySprites;
 Entity[] sigils;
 Entity drummer, flautist, harpist, lutist;
 SoundFile SongAudio;
+
+
 void setup() {
   size(1920, 1080);
   //fullScreen();
@@ -48,7 +50,7 @@ void setup() {
   SongAudio = new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3"));
   SongAudio.play();
   Song = getSong("BadApple.txt");
-  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, harpistSprites, centerX , centerY  - height /2);
+  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySprites, centerX , centerY  - height /2);
   bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, centerX ,  centerY + height /2);
   leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, centerX  - height /2,  centerY );
   rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[2  ], speed, drummerSprites, centerX + height /2,  centerY );
@@ -82,6 +84,8 @@ void setupAnim()
   harpistSprites = new ArrayList<PImage[]>();
   harpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Idle")));
   harpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Atk1")));
+  enemySprites = new ArrayList<PImage[]>();
+  enemySprites.add(loadImagesFromFolder(sketchPath("data/Enemy/WalkDown")));
 }
 
 void draw() {
