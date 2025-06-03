@@ -1,8 +1,8 @@
 import os
 import numpy as np
 import random
-import pretty_midi
 import librosa
+import mido
 
 INSTRUMENT_TO_LANE = {
     'Flute': 0,
@@ -11,31 +11,49 @@ INSTRUMENT_TO_LANE = {
     'Lute': 3
 }
 
-def instrument_name(instr):
-    if instr.is_drum:
-        return 'Drums'
-    prog_name = pretty_midi.program_to_instrument_name(instr.program)
-    if 'Flute' in prog_name:
+def instrument_name(program):
+    if 72 <= program <= 74:
         return 'Flute'
-    elif 'Harp' in prog_name or 'Celesta' in prog_name :   
+    elif 6 <= program <= 15 or program in (46, 47):
         return 'Harp'
-    elif 'Lute' in prog_name or 'Guitar' in prog_name:
+    elif 24 <= program <= 31 or 104 <= program <= 111:
         return 'Lute'
-    elif 'Drums' in prog_name or 'Synth Drum' in prog_name:
-        return 'Drums'
     return None
 
 def extract_from_midi(midi_path):
-    midi_data = pretty_midi.PrettyMIDI(midi_path)
+    mid = mido.MidiFile(midi_path)
+    ticks_per_beat = mid.ticks_per_beat
+    tempo = 500000
     lanes = [[] for _ in range(4)]
-    for instr in midi_data.instruments:
-        name = instrument_name(instr)
-        if name is None:
-            continue
-        lane = INSTRUMENT_TO_LANE[name]
-        for note in instr.notes:
-            frame = int(round(note.start * 60))
-            lanes[lane].append(frame)
+    programs = {i: 0 for i in range(16)}
+
+    for track in mid.tracks:
+        time = 0
+        for msg in track:
+            time += msg.time
+
+            # said to add these online
+            if msg.type == 'set_tempo':
+                tempo = msg.tempo
+            elif msg.type == 'program_change':
+                programs[msg.channel] = msg.program
+            
+            elif msg.type == 'note_on' and msg.velocity > 0:
+                note = msg.note
+                if 35 <= note <= 81:
+                    name = 'Drums'
+                else:
+                    program = programs.get(msg.channel, 0)
+                    name = instrument_name(program)
+
+                if name is None:
+                    continue
+
+                lane = INSTRUMENT_TO_LANE[name]
+                seconds = mido.tick2second(time, ticks_per_beat, tempo)
+                frame = int(round(seconds * 60))
+                lanes[lane].append(frame)
+
     for lane in lanes:
         lane.sort()
     return lanes
