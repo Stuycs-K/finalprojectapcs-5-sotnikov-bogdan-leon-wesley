@@ -10,3 +10,12 @@ Made sprites for the player characters and background.
 
 ### 2025-05-29 - Art
 Implementation of sprites and got music for the game.
+
+### 2025-05-30 - Art and functionality
+Fixed some sprites and key press functionality
+
+### 2025-06-01 - Music
+Fixed the music files and tried to fix the note generator
+
+### 2025-06-02 - Art
+Implementing and fixing more visuals
