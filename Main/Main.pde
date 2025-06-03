@@ -91,13 +91,8 @@ void LoadGame()
   
   SongAudio = new SoundFile(this, sketchPath("data/SongAudio/" + currentSong + ".mp3"));
   SongAudio.play();
-<<<<<<< HEAD
-  Song = getSong("BadApple.txt");
-  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySprites, centerX , centerY  - height /2);
-=======
   Song = getSong(currentSong + ".txt");
-  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, harpistSprites, centerX , centerY  - height /2);
->>>>>>> 7f8c2b63bf6ab5f80c990911f8cd820f773340ba
+  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySprites, centerX , centerY  - height /2);
   bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, centerX ,  centerY + height /2);
   leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, centerX  - height /2,  centerY );
   rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[2  ], speed, drummerSprites, centerX + height /2,  centerY );
