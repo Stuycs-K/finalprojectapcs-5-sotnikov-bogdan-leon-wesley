@@ -10,7 +10,7 @@ int[][] Song;
 int speed = 2;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
-PImage bg, bgo;
+PImage bg, bgo, crystal;
 int score = 0;
 ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites;
 Entity[] sigils;
@@ -21,6 +21,7 @@ void setup() {
   //fullScreen();
   bg = loadImage(sketchPath("data/Background.png"));
   bgo = loadImage(sketchPath("data/BackgroundOverlay.png"));
+  crystal = loadImage(sketchPath("data/crystal.png"));
   dummySprites = new ArrayList<PImage[]>();
   dummySprites.add( new PImage[] {createImage(32, 32, RGB)});
   dummySprites.get(0)[0].loadPixels();
@@ -102,6 +103,7 @@ void draw() {
   }
   
   harpist.drawSprite();
+  image(crystal, width/2-64-8, height/2-64-8);
   drummer.drawSprite();
   flautist.drawSprite();
   lutist.drawSprite();
