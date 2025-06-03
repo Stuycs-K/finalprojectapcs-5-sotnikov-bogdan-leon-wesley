@@ -3,6 +3,8 @@ import java.util.HashSet;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+
+//Game Loop
 NotePlayer topPlayer, bottomPlayer, leftPlayer, rightPlayer;
 Entity centerPoint;
 ArrayList<PImage[]> dummySprites;
@@ -16,9 +18,50 @@ ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprit
 Entity[] sigils;
 Entity drummer, flautist, harpist, lutist;
 SoundFile SongAudio;
+
+//Main Menu
+ArrayList<MenuItem> items;
+float scrollY = 0;
+float targetScrollY = 0;
+float spacing = 140;
+float maxScale = 1.4;
+float fadeStart = 180;
+float scrollSpeed = 40;
+MenuItem activeItem = null;
+
+// Play Button
+float playButtonX = 1500;
+float playButtonY = 540;
+float playButtonW = 600;
+float playButtonH = 300;
+
+int Scene = 0;
+boolean gameLoaded = false;
 void setup() {
   size(1920, 1080);
   //fullScreen();
+  if (Scene == 0)
+  {
+    items = new ArrayList<MenuItem>();
+    textAlign(CENTER, CENTER);
+    textSize(20);
+    smooth();
+
+    for (int i = 0; i < 10; i++) {
+      items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+    }
+  }
+  // dummy code to keep func, can remove
+  if (Scene == 1)
+  {
+    LoadGame();
+  }
+  frameRate(60);
+}
+
+void LoadGame()
+{
+  String currentSong = activeItem == null? "BadApple" : activeItem.label;
   bg = loadImage(sketchPath("data/Background.png"));
   bgo = loadImage(sketchPath("data/BackgroundOverlay.png"));
   dummySprites = new ArrayList<PImage[]>();
@@ -44,9 +87,9 @@ void setup() {
   harpist.setFrameDelay(20);
   lutist.setFrameDelay(20);
   
-  SongAudio = new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3"));
+  SongAudio = new SoundFile(this, sketchPath("data/SongAudio/" + currentSong + ".mp3"));
   SongAudio.play();
-  Song = getSong("BadApple.txt");
+  Song = getSong(currentSong + ".txt");
   topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, harpistSprites, centerX , centerY  - height /2);
   bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, centerX ,  centerY + height /2);
   leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, centerX  - height /2,  centerY );
@@ -62,11 +105,9 @@ void setup() {
   sigils[1] = new Entity(this, sigil, centerX  - offset, centerY  , 128, 128);
   sigils[2] = new Entity(this, sigil, centerX  , centerY  - offset, 128, 128);
   sigils[3] = new Entity(this, sigil, centerX  , centerY + offset, 128, 128);
+  gameLoaded = true;
   
-  
-  frameRate(60);
 }
-
 void setupAnim()
 {
   drummerSprites = new ArrayList<PImage[]>();
@@ -84,8 +125,22 @@ void setupAnim()
 }
 
 void draw() {
-  image(bg, 0, 0);
   
+  switch(Scene)
+  {
+    case 0:
+      MainMenu();
+      break;
+    case 1:
+      if (gameLoaded) GameLoop();
+      break;
+  }
+}
+
+void GameLoop()
+{
+    resetMatrix();
+  image(bg, 0, 0);
   topPlayer.update();
   bottomPlayer.update();
   leftPlayer.update();
@@ -114,10 +169,99 @@ void draw() {
   hitZones.clear();
   image(bgo, 0, 0);
 }
+void MainMenu()
+{
+  background(30);
+  scrollY = lerp(scrollY, targetScrollY, 0.2);
+
+  float centerY = height / 2;
+  activeItem = null;
+  float closestDist = Float.MAX_VALUE;
+
+  for (int i = 0; i < items.size(); i++) {
+    float y = i * spacing - scrollY + centerY;
+    float distToCenter = abs(y - centerY);
+
+    float scale = map(distToCenter, 0, centerY, maxScale, 0.6);
+    scale = constrain(scale, 0.6, maxScale);
+
+    float alpha = map(distToCenter, 0, fadeStart, 255, 0);
+    alpha = constrain(alpha, 0, 255);
+
+    pushMatrix();
+    translate(width / 2 - 200, y);
+    scale(scale);
+    items.get(i).display(alpha);
+    popMatrix();
+
+    if (distToCenter < closestDist) {
+      closestDist = distToCenter;
+      activeItem = items.get(i);
+    }
+  }
+
+  if (activeItem != null && activeItem.sound != null && !activeItem.sound.isPlaying()) {
+    activeItem.sound.play();
+  }
+
+  drawPlayButton();
+}
+void drawPlayButton() {
+  if (Scene == 0)
+  {
+    fill(60);
+    stroke(255);
+    rectMode(CENTER);
+    rect(playButtonX, playButtonY, playButtonW, playButtonH, 10);
+    fill(255);
+    text("Play", playButtonX, playButtonY);
+  }
+}
+
+void mousePressed() {
+  if (Scene == 0)
+  {
+      if (mouseX > playButtonX - playButtonW/2 &&
+      mouseX < playButtonX + playButtonW/2 &&
+      mouseY > playButtonY - playButtonH/2 &&
+      mouseY < playButtonY + playButtonH/2) 
+      {
+        if (activeItem != null) 
+        {
+          switchScene(activeItem);
+        }
+      }
+  }
+}
+
+void mouseWheel(MouseEvent event) 
+{
+  float e = event.getCount();
+  targetScrollY += e * scrollSpeed;
+  targetScrollY = constrain(targetScrollY, 0, (items.size() - 1) * spacing);
+}
+
+void switchScene(MenuItem activeItem)
+{
+  Scene = 1;
+  resetMatrix();
+  noTint();
+  imageMode(CORNER);
+  rectMode(CORNER);
+  LoadGame();
+  
+}
+
+
 void keyPressed() {
-  keysDown.add((int)keyCode);
-  checkDirectionalHits();
-  keysDown.remove((int)keyCode);
+  if (Scene == 1)
+  {
+    keysDown.add((int)keyCode);
+    checkDirectionalHits();
+    keysDown.remove((int)keyCode);
+  }
+    
+
 }
 
 
@@ -192,7 +336,7 @@ int[][] getSong(String path) {
     int count = sc.nextInt();
     lanes[i] = new int[count];
     for (int j = 0; j < count; j++) {
-      lanes[i][j] = sc.nextInt() - height * 3/ (4 * speed);
+      lanes[i][j] = sc.nextInt() - (int)((height * 0.75f) / speed);
     }
     sc.close();
   }
