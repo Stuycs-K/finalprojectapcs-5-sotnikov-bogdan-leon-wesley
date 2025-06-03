@@ -36,6 +36,7 @@ float playButtonW = 600;
 float playButtonH = 300;
 
 int Scene = 0;
+int offset = 0;
 boolean gameLoaded = false;
 
 void setup() {
@@ -48,9 +49,14 @@ void setup() {
     textSize(20);
     smooth();
 
-    for (int i = 0; i < 10; i++) {
-      items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-    }
+    items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+        items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+            items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+                items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+                    items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+                        items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+                        
+    items.add(new MenuItem("ploopy", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
   }
   // dummy code to keep func, can remove
   if (Scene == 1)
@@ -90,7 +96,6 @@ void LoadGame()
   lutist.setFrameDelay(20);
   
   SongAudio = new SoundFile(this, sketchPath("data/SongAudio/" + currentSong + ".mp3"));
-  SongAudio.play();
   Song = getSong(currentSong + ".txt");
   topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySprites, centerX , centerY  - height /2);
   bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, centerX ,  centerY + height /2);
@@ -143,7 +148,9 @@ void draw() {
 
 void GameLoop()
 {
-    resetMatrix();
+  resetMatrix();
+  offset++;
+  if (offset == (int)((height * 0.75f) / speed)) SongAudio.play();
   image(bg, 0, 0);
   topPlayer.update();
   bottomPlayer.update();
@@ -341,7 +348,7 @@ int[][] getSong(String path) {
     int count = sc.nextInt();
     lanes[i] = new int[count];
     for (int j = 0; j < count; j++) {
-      lanes[i][j] = sc.nextInt() - (int)((height * 0.75f) / speed);
+      lanes[i][j] = sc.nextInt();
     }
     sc.close();
   }
