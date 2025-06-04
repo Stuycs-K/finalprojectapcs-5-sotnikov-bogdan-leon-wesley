@@ -18,7 +18,7 @@ def instrument_name(program):
         return 'Harp'
     elif 24 <= program <= 31 or 104 <= program <= 111:
         return 'Lute'
-    return None
+    return 'Drums'
 
 def extract_from_midi(midi_path):
     mid = mido.MidiFile(midi_path)
@@ -39,8 +39,8 @@ def extract_from_midi(midi_path):
                 programs[msg.channel] = msg.program
 
             elif msg.type == 'note_on' and msg.velocity > 0:
-                note = msg.note
-                if 35 <= note <= 81:
+                
+                if msg.channel == 9:
                     name = 'Drums'
                 else:
                     program = programs.get(msg.channel, 0)
