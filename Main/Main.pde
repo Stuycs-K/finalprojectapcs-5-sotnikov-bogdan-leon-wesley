@@ -29,16 +29,20 @@ float fadeStart = 180;
 float scrollSpeed = 40;
 MenuItem activeItem = null;
 // Play Button
-float playButtonX = 1500;
-float playButtonY = 540;
+float playButtonX = 1300;
+float playButtonY = 800;
 float playButtonW = 600;
-float playButtonH = 300;
+float playButtonH = 200;
+float imageHeight = 600;
 
 int Scene = 0;
 int offset = 0;
 boolean gameLoaded = false;
 boolean gameOver = false;
 int finalNote = 0;
+boolean transition = false;
+int counter = -480;
+int alpha = 0;
 void setup() {
   size(1920, 1080);
   //fullScreen();
@@ -54,7 +58,7 @@ void setup() {
             items.add(new MenuItem("BadAppl2e", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
                 items.add(new MenuItem("BadAp3ple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
                     items.add(new MenuItem("BadAp3ple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-                        items.add(new MenuItem("B1adApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+                        items.add(new MenuItem("B1adApple", loadImage(sketchPath("data/crystal.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
                         
     items.add(new MenuItem("ploopy", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
   }
@@ -134,16 +138,68 @@ void setupAnim()
 }
 
 void draw() {
-  
-  switch(Scene)
+  if (transition) 
   {
-    case 0:
-      MainMenu();
-      break;
-    case 1:
-      if (gameLoaded) GameLoop();
-      break;
+
+    print(counter);
+    if(counter <= 0)
+    {
+          switch(Scene)
+    {
+      case 1:
+        MainMenu();
+        break;
+      case 0:
+        if (gameLoaded) GameLoop();
+        break;
+    }
+      counter +=1;
+      rectMode(CORNER);
+      fill(0);
+      alpha = constrain(alpha +1, 0, 255);
+      tint(alpha);
+      rect(counter * 4, 0, 1920, 1080);
+    }
+    if (counter <= 480 && counter > 0)
+    {
+       switch(Scene)
+      {
+        case 0:
+          MainMenu();
+          break;
+        case 1:
+          if (gameLoaded) GameLoop();
+          break;
+      }
+      counter +=1;
+      rectMode(CORNER);
+      fill(0);
+      alpha = constrain(alpha -1, 0, 255);
+      tint(alpha);
+      rect(counter * 4, 0, 1920, 1080);
+    }
+    if (counter == 480)
+    {
+      transition = false;
+      counter = 0;
+      alpha = 0;
+    }
+    tint(255,255,255);
   }
+  else
+  {
+      switch(Scene)
+      {
+        case 0:
+          MainMenu();
+          break;
+        case 1:
+          if (gameLoaded) GameLoop();
+          break;
+      }
+  }
+    
+
 }
 
 void GameLoop()
@@ -152,6 +208,11 @@ void GameLoop()
   offset++;
   if (offset == (int)((height * 0.25f) / speed)) SongAudio.play();
   image(bg, 0, 0);
+  for (Entity m : sigils)
+  {
+    m.drawSprite();
+  }
+  
   topPlayer.update();
   bottomPlayer.update();
   leftPlayer.update();
@@ -173,11 +234,7 @@ void GameLoop()
   flautist.drawSprite();
   lutist.drawSprite();
   
-  for (Entity m : sigils)
-  {
-    m.drawSprite();
-  }
-  
+
   hitZones.clear();
   image(bgo, 0, 0);
   if ((offset - (int)(height * 0.25f) / speed) >= finalNote) 
@@ -188,7 +245,7 @@ void GameLoop()
 }
 void MainMenu()
 {
-  background(30);
+  background(140);
   scrollY = lerp(scrollY, targetScrollY, 0.2);
 
   float centerY = height / 2;
@@ -205,7 +262,7 @@ void MainMenu()
     alpha = constrain(alpha, 0, 255);
 
     pushMatrix();
-    translate(width / 2 - 200, y);
+    translate(width / 4, y);
     scale(scale);
     items.get(i).display(alpha);
     popMatrix();
@@ -222,10 +279,18 @@ void MainMenu()
       cur.sound.pause();
       activeItem.sound.play();
    }  
-
-
-
   drawPlayButton();
+  drawImage();
+  
+}
+void drawImage(){
+  
+  if (Scene == 0 && activeItem != null)
+  {
+    rectMode(CENTER);
+    tint(255,255,255);
+    image(activeItem.img, playButtonX, playButtonY -450, 600, 600);
+  }
 }
 void drawPlayButton() {
   if (Scene == 0)
@@ -258,6 +323,7 @@ void mousePressed() {
       {
         if (activeItem != null) 
         {
+          transition = true;
           switchScene(activeItem);
         }
       }
@@ -271,6 +337,7 @@ void mousePressed() {
       {
         if (activeItem != null) 
         {
+          transition = true;
           resetScene();
         }
       }
