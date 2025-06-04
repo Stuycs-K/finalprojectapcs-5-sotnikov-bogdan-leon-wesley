@@ -10,7 +10,7 @@ INSTRUMENT_TO_LANE = {
     'Drums': 2,
     'Lute': 3
 }
-filter = False;
+filter = False
 def instrument_name(program):
     if 72 <= program <= 74:
         return 'Flute'
@@ -94,7 +94,7 @@ def generate(mode, input_path):
         lanes = extract_from_audio(input_path)
     else:
         raise ValueError("Mode must be 'midi' or 'audio'.")
-    #
+    
     if (filter):
         for i in range(len(lanes)):
             lanes[i] = quantize_notes(lanes[i], grid=5)
@@ -123,9 +123,10 @@ if __name__ == "__main__":
     parser.add_argument('--input', required=True)
     parser.add_argument('--filter', required=False)
     args = parser.parse_args()
-    generate(args.mode, args.input)
     if (args.filter):
         filter = args.filter
+    generate(args.mode, args.input)
+
 
 # How to use for bogden ->
 # paste in terminal python SongConverter.py --mode midi --input Main/data/SongAudio/[whatever].mid

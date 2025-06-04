@@ -28,7 +28,6 @@ float maxScale = 1.4;
 float fadeStart = 180;
 float scrollSpeed = 40;
 MenuItem activeItem = null;
-
 // Play Button
 float playButtonX = 1500;
 float playButtonY = 540;
@@ -38,7 +37,8 @@ float playButtonH = 300;
 int Scene = 0;
 int offset = 0;
 boolean gameLoaded = false;
-
+boolean gameOver = false;
+int finalNote = 0;
 void setup() {
   size(1920, 1080);
   //fullScreen();
@@ -50,11 +50,11 @@ void setup() {
     smooth();
 
     items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-        items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-            items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-                items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-                    items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-                        items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+        items.add(new MenuItem("BadAppley", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+            items.add(new MenuItem("BadAppl2e", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+                items.add(new MenuItem("BadAp3ple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+                    items.add(new MenuItem("BadAp3ple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+                        items.add(new MenuItem("B1adApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
                         
     items.add(new MenuItem("ploopy", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
   }
@@ -150,7 +150,7 @@ void GameLoop()
 {
   resetMatrix();
   offset++;
-  if (offset == (int)((height * 0.75f) / speed)) SongAudio.play();
+  if (offset == (int)((height * 0.25f) / speed)) SongAudio.play();
   image(bg, 0, 0);
   topPlayer.update();
   bottomPlayer.update();
@@ -180,6 +180,11 @@ void GameLoop()
   
   hitZones.clear();
   image(bgo, 0, 0);
+  if ((offset - (int)(height * 0.25f) / speed) >= finalNote) 
+  {
+    gameOver = true;
+    drawEnd();
+  }
 }
 void MainMenu()
 {
@@ -187,9 +192,8 @@ void MainMenu()
   scrollY = lerp(scrollY, targetScrollY, 0.2);
 
   float centerY = height / 2;
-  activeItem = null;
   float closestDist = Float.MAX_VALUE;
-
+  MenuItem cur = activeItem;
   for (int i = 0; i < items.size(); i++) {
     float y = i * spacing - scrollY + centerY;
     float distToCenter = abs(y - centerY);
@@ -206,15 +210,20 @@ void MainMenu()
     items.get(i).display(alpha);
     popMatrix();
 
-    if (distToCenter < closestDist) {
-      closestDist = distToCenter;
-      activeItem = items.get(i);
-    }
+    if (distToCenter < closestDist) 
+    {  
+       closestDist = distToCenter;
+       activeItem = items.get(i);
+     }
   }
+  if (activeItem != null && activeItem.sound != null && !activeItem.sound.isPlaying() && cur != null && activeItem.label != cur.label) 
+   {
+      cur.sound.jump(0);
+      cur.sound.pause();
+      activeItem.sound.play();
+   }  
 
-  if (activeItem != null && activeItem.sound != null && !activeItem.sound.isPlaying()) {
-    activeItem.sound.play();
-  }
+
 
   drawPlayButton();
 }
@@ -228,6 +237,15 @@ void drawPlayButton() {
     fill(255);
     text("Play", playButtonX, playButtonY);
   }
+}
+void drawEnd() {
+  fill(60);
+  stroke(255);
+  rectMode(CENTER);
+  rect(width/2, height/2, playButtonW, playButtonH, 10);
+  fill(255);
+  text("Main Menu", width/2, height/2);
+  text("Score:" + score, width/2, height/2 - 200);
 }
 
 void mousePressed() {
@@ -244,7 +262,31 @@ void mousePressed() {
         }
       }
   }
+  if (Scene == 1 && gameOver)
+  {
+      if (mouseX > width/2 - playButtonW/2 &&
+      mouseX < width/2 + playButtonW/2 &&
+      mouseY > height/2 - playButtonH/2 &&
+      mouseY < height/2 + playButtonH/2) 
+      {
+        if (activeItem != null) 
+        {
+          resetScene();
+        }
+      }
+  }
 }
+void resetScene()
+{
+  activeItem = null;
+  offset = 0;
+  targetScrollY = 0;
+  gameOver = false;
+  gameLoaded = false;
+  finalNote = 0;
+  Scene = 0;
+}
+
 
 void mouseWheel(MouseEvent event) 
 {
@@ -348,7 +390,9 @@ int[][] getSong(String path) {
     int count = sc.nextInt();
     lanes[i] = new int[count];
     for (int j = 0; j < count; j++) {
-      lanes[i][j] = sc.nextInt();
+      int x = sc.nextInt();
+      finalNote = x > finalNote? x : finalNote;
+      lanes[i][j] = x;
     }
     sc.close();
   }

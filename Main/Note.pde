@@ -1,4 +1,4 @@
-import processing.sound.SoundFile;
+  import processing.sound.SoundFile;
 class Note extends Entity {
   private boolean isHit = false;
   private boolean isFinished = false;
