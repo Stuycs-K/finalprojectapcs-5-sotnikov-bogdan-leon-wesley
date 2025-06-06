@@ -3,6 +3,7 @@ import java.util.HashSet;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Arrays;
 
 //Game Loop
 NotePlayer topPlayer, bottomPlayer, leftPlayer, rightPlayer;
@@ -41,11 +42,16 @@ boolean gameLoaded = false;
 boolean gameOver = false;
 int finalNote = 0;
 boolean transition = false;
-int counter = -480;
+int counter = -240;
 int alpha = 0;
+static double dt;
+double t;
+
 void setup() {
   size(1920, 1080);
   //fullScreen();
+  t = System.currentTimeMillis();
+  dt = 0;
   if (Scene == 0)
   {
     items = new ArrayList<MenuItem>();
@@ -69,7 +75,10 @@ void setup() {
   }
   frameRate(60);
 }
-
+double getDt()
+{
+ return dt; 
+}
 void LoadGame()
 {
   String currentSong = activeItem == null? "BadApple" : activeItem.label;
@@ -94,10 +103,11 @@ void LoadGame()
   harpist = new Entity(this, harpistSprites, centerX , centerY - 96, 128, 128);
   lutist = new Entity(this, lutistSprites, centerX, centerY + 96, 128, 128);
   
-  drummer.setFrameDelay(20);
-  flautist.setFrameDelay(20);
-  harpist.setFrameDelay(20);
-  lutist.setFrameDelay(20);
+  drummer.setFrameDelay(0,20);
+  flautist.setFrameDelay(0,20);
+  harpist.setFrameDelay(0,20);
+  lutist.setFrameDelay(0,20);
+  drummer.setFrameDelay(1,5);
   
   SongAudio = new SoundFile(this, sketchPath("data/SongAudio/" + currentSong + ".mp3"));
   Song = getSong(currentSong + ".txt");
@@ -138,31 +148,24 @@ void setupAnim()
 }
 
 void draw() {
+  dt = System.currentTimeMillis() - t;
+  t = System.currentTimeMillis();
   if (transition) 
   {
 
-    print(counter);
     if(counter <= 0)
     {
-          switch(Scene)
-    {
-      case 1:
-        MainMenu();
-        break;
-      case 0:
-        if (gameLoaded) GameLoop();
-        break;
-    }
       counter +=1;
       rectMode(CORNER);
       fill(0);
       alpha = constrain(alpha +1, 0, 255);
       tint(alpha);
-      rect(counter * 4, 0, 1920, 1080);
+      rect(counter * 8, 0, 1920, 1080);
     }
-    if (counter <= 480 && counter > 0)
+    if (counter <= 240 && counter > 0)
     {
-       switch(Scene)
+      counter +=1;
+      switch(Scene)
       {
         case 0:
           MainMenu();
@@ -171,14 +174,14 @@ void draw() {
           if (gameLoaded) GameLoop();
           break;
       }
-      counter +=1;
       rectMode(CORNER);
       fill(0);
       alpha = constrain(alpha -1, 0, 255);
       tint(alpha);
-      rect(counter * 4, 0, 1920, 1080);
+      rect(counter * 8, 0, 1920, 1080);
+
     }
-    if (counter == 480)
+    if (counter == 240)
     {
       transition = false;
       counter = 0;
@@ -205,25 +208,29 @@ void draw() {
 void GameLoop()
 {
   resetMatrix();
-  offset++;
-  if (offset == (int)((height * 0.25f) / speed)) SongAudio.play();
   image(bg, 0, 0);
   for (Entity m : sigils)
   {
     m.drawSprite();
   }
-  
-  topPlayer.update();
-  bottomPlayer.update();
-  leftPlayer.update();
-  rightPlayer.update();
+  if (transition == false)
+  {
+    offset++;
+    if (offset == (int)((height * 0.25f) / speed * dt)) SongAudio.play();
+    topPlayer.update();
+    bottomPlayer.update();
+    leftPlayer.update();
+    rightPlayer.update();
+    checkCenterHits(topPlayer);
+    checkCenterHits(bottomPlayer);
+    checkCenterHits(leftPlayer);
+    checkCenterHits(rightPlayer);
+    centerPoint.drawSprite();
+    centerPoint.drawHitbox(this);
+  }
 
-  checkCenterHits(topPlayer);
-  checkCenterHits(bottomPlayer);
-  checkCenterHits(leftPlayer);
-  checkCenterHits(rightPlayer);
-  centerPoint.drawSprite();
-  centerPoint.drawHitbox(this);
+
+
   for (Entity z : hitZones) {
     z.drawHitbox(this);
   }
@@ -233,11 +240,9 @@ void GameLoop()
   drummer.drawSprite();
   flautist.drawSprite();
   lutist.drawSprite();
-  
-
   hitZones.clear();
   image(bgo, 0, 0);
-  if ((offset - (int)(height * 0.25f) / speed) >= finalNote) 
+  if ((offset - (int)(height * 0.25f) / speed * dt) >= finalNote) 
   {
     gameOver = true;
     drawEnd();
@@ -398,6 +403,7 @@ void checkDirectionalHits() {
   }
   if (keysDown.contains((int)'D') || keysDown.contains(RIGHT)) {
     createHitZoneAndCheck(rightPlayer, 1, 0, 'd');
+    drummer.setAnim(1);
   }
 }
 

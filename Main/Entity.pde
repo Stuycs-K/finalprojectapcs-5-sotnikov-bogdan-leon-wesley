@@ -3,6 +3,7 @@ class Entity {
   
   protected int[] pos = new int[2];
   protected int[] center = new int[2];
+  
   protected ArrayList<PImage[]> frames;
   protected int anims;
   protected int curAnim = 0;
@@ -11,6 +12,7 @@ class Entity {
   // Animation speed control
   protected int frameDelay = 5;
   protected int frameCounter = 0;
+  protected int[] frameDelays;
 
   // Hitbox info
   protected int hitboxWidth = 0;
@@ -18,6 +20,18 @@ class Entity {
 
   // Constructors
 
+  Entity(PApplet applet, ArrayList<PImage[]> sprites, int[] speeds, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
+    this.applet = applet;  // save PApplet
+    frames = sprites;
+    anims = sprites.size();
+    pos[0] = xPos;
+    pos[1] = yPos;
+    this.hitboxWidth = hitboxWidth;
+    this.hitboxHeight = hitboxHeight;
+    center[0] = hitboxWidth / 2;
+    center[1] = hitboxHeight / 2;
+    frameDelays = speeds;
+  }
   Entity(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
     this.applet = applet;  // save PApplet
     frames = sprites;
@@ -28,6 +42,8 @@ class Entity {
     this.hitboxHeight = hitboxHeight;
     center[0] = hitboxWidth / 2;
     center[1] = hitboxHeight / 2;
+    frameDelays = new int[sprites.size()];
+    Arrays.fill(frameDelays, 20);
   }
 
   Entity(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos) {
@@ -38,8 +54,8 @@ class Entity {
     this(applet, sprites, 0, 0);
   }
 
-  void setFrameDelay(int delay) {
-    frameDelay = max(1, delay);
+  void setFrameDelay(int index, int delay) {
+    frameDelays[index] = max(1, delay);
   }
 
   void setHitboxSize(int w, int h) {
@@ -79,18 +95,28 @@ class Entity {
   void drawSprite() {
     drawSprite(curAnim);
   }
+  void setAnim(int anim)
+  {
+    if (anim > frames.size()) return;
+    curAnim = anim;
+    curSprite = 0;
+    frameCounter = 0;
+    frameDelay = frameDelays[anim];
+  }
 
   void drawSprite(int anim) {
     if (anim != curAnim) {
-      curSprite = 0;
-      curAnim = anim;
-      frameCounter = 0;
+      setAnim(anim);
     }
 
     image(frames.get(anim)[curSprite], pos[0] - center[0], pos[1] - center[1]);
     frameCounter++;
     if (frameCounter >= frameDelay) {
-      curSprite = (curSprite + 1) % frames.get(anim).length;
+      curSprite = (curSprite + 1);
+      if(curSprite == frames.get(anim).length)
+      {
+        setAnim(0);
+      }
       frameCounter = 0;
     }
   }

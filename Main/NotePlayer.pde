@@ -8,6 +8,7 @@ class NotePlayer {
   ArrayList<Note> notes = new ArrayList<Note>();
   ArrayList<PImage[]> sprites;
   int startX, startY;
+  int[] frameTime = new int[]{20};
 
   NotePlayer(PApplet applet, int[] direction, int[] spawnFrames, int speed, ArrayList<PImage[]> sprites, int startX, int startY) {
     this.applet = applet;
@@ -26,7 +27,7 @@ class NotePlayer {
     {
       if (spawnFrames[framesPlayed] > 0)
       {
-        Note n = new Note(applet, sprites, startX, startY, 128, 128);
+        Note n = new Note(applet, sprites,frameTime, startX, startY, 128, 128);
         notes.add(n);
       }
        
@@ -37,7 +38,7 @@ class NotePlayer {
     for (int i = notes.size() - 1; i >= 0; i--) {
       Note n = notes.get(i);
       if (!n.isHit()) {
-        n.move(direction[0] * speed, direction[1] * speed);
+        n.move(direction[0] * (int)(speed * dt), direction[1] * speed);
       }
       n.drawSprite();
       n.drawHitbox(applet);

@@ -4,7 +4,9 @@ class Note extends Entity {
   private boolean isFinished = false;
   private int hitAnimIndex = 0;
   
-
+  Note(PApplet applet, ArrayList<PImage[]> sprites, int[]frameTime, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
+    super(applet, sprites, frameTime, xPos, yPos, hitboxWidth, hitboxHeight);
+  }
   Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
     super(applet, sprites, xPos, yPos, hitboxWidth, hitboxHeight);
   }
@@ -27,7 +29,7 @@ class Note extends Entity {
       }
       applet.image(frames.get(curAnim)[curSprite], pos[0] - center[0], pos[1] - center[1]);
       frameCounter++;
-      if (frameCounter >= frameDelay) {
+      if (frameCounter >= 0) {
         curSprite++;
         frameCounter = 0;
       }
