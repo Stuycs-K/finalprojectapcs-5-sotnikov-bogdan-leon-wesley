@@ -3,7 +3,7 @@ class NotePlayer {
   int[] direction;
   int speed;
   int[] spawnFrames;
-  int currentFrame = 0;
+  float currentFrame = 0;
   int framesPlayed = 0;
   ArrayList<Note> notes = new ArrayList<Note>();
   ArrayList<PImage[]> sprites;
@@ -21,7 +21,7 @@ class NotePlayer {
   }
 
   void update() {
-    currentFrame++;
+    currentFrame += 60 * dt;
     
     if (framesPlayed < spawnFrames.length && spawnFrames[framesPlayed] <= currentFrame)
     {
@@ -39,7 +39,6 @@ class NotePlayer {
       Note n = notes.get(i);
       if (!n.isHit()) {
         n.move((float)(direction[0] * speed * dt), (float)(direction[1] * speed * dt));
-        println(dt);
       }
       n.drawSprite();
       n.drawHitbox(applet);
@@ -52,5 +51,10 @@ class NotePlayer {
 
   ArrayList<Note> getNotes() {
     return notes;
+  }
+  
+  Note testNote(){
+    Note n = new Note(applet, sprites,frameTime, startX, startY, 128, 128);
+    return n;
   }
 }

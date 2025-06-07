@@ -29,6 +29,9 @@ float maxScale = 1.4;
 float fadeStart = 180;
 float scrollSpeed = 40;
 MenuItem activeItem = null;
+double timeOn = 0;
+boolean played = false;
+
 // Play Button
 float playButtonX = 1300;
 float playButtonY = 800;
@@ -38,15 +41,20 @@ float imageHeight = 600;
 
 int Scene = 0;
 int offset = 0;
+int frames = 0;
 boolean gameLoaded = false;
 boolean gameOver = false;
 int finalNote = 0;
 boolean transition = false;
-int counter = -240;
+int counter = -360;
 int alpha = 0;
 static double dt;
 double t;
-
+boolean testNote = false;
+boolean pause = false;
+boolean gameStart = false;
+float pauseTime = 0;
+Note tester;
 
 
 void setup() {
@@ -61,14 +69,12 @@ void setup() {
     textSize(20);
     smooth();
 
-    items.add(new MenuItem("BadApple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-        items.add(new MenuItem("BadAppley", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-            items.add(new MenuItem("BadAppl2e", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-                items.add(new MenuItem("BadAp3ple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-                    items.add(new MenuItem("BadAp3ple", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-                        items.add(new MenuItem("B1adApple", loadImage(sketchPath("data/crystal.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
-                        
-    items.add(new MenuItem("ploopy", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav"))));
+    items.add(new MenuItem("Bad Apple", loadImage(sketchPath("data/MenuItems/tester.jpg")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3")), "BadApple"));
+    items.add(new MenuItem("ksi", loadImage(sketchPath("data/MenuItems/ksi_thumbnail.png")), new SoundFile(this, sketchPath("data/MenuItems/ksi_snippet.mp3")), new SoundFile(this, sketchPath("data/SongAudio/ksi.mp3")), "ksi"));
+    items.add(new MenuItem("Machine Love (feat. Teto)", loadImage(sketchPath("data/MenuItems/machinelove_thumbnail.png")),
+      new SoundFile(this, sketchPath("data/MenuItems/machinelove_snippet.mp3")), new SoundFile(this, sketchPath("data/SongAudio/Machine Love (feat. Kasane Teto).mp3")), "MachineLove"));
+    items.add(new MenuItem("Prokofiev", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/Prokofiev.mp3")), "Prokofiev"));
+    items.add(new MenuItem("ploopy", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/ploopy.mp3")), "ploopy"));
   }
   // dummy code to keep func, can remove
   if (Scene == 1)
@@ -79,11 +85,10 @@ void setup() {
 }
 double getDt()
 {
- return dt; 
+  return dt;
 }
 void LoadGame()
 {
-  String currentSong = activeItem == null? "BadApple" : activeItem.label;
   bg = loadImage(sketchPath("data/Background.png"));
   bgo = loadImage(sketchPath("data/BackgroundOverlay.png"));
   crystal = loadImage(sketchPath("data/crystal.png"));
@@ -96,40 +101,40 @@ void LoadGame()
   dummySprites.get(0)[0].updatePixels();
 
   setupAnim();
-  
+
   int centerX = width /2;
   int centerY = height/2;
-  centerPoint = new Entity(this, dummySprites, centerX, centerY , 256, 256);
+  centerPoint = new Entity(this, dummySprites, centerX, centerY, 256, 256);
   drummer = new Entity(this, drummerSprites, centerX + 96, centerY, 128, 128);
-  flautist = new Entity(this, flautistSprites, centerX -96 , centerY, 128, 128);
-  harpist = new Entity(this, harpistSprites, centerX , centerY - 96, 128, 128);
+  flautist = new Entity(this, flautistSprites, centerX -96, centerY, 128, 128);
+  harpist = new Entity(this, harpistSprites, centerX, centerY - 96, 128, 128);
   lutist = new Entity(this, lutistSprites, centerX, centerY + 96, 128, 128);
-  
-  drummer.setFrameDelay(0,20);
-  flautist.setFrameDelay(0,20);
-  harpist.setFrameDelay(0,20);
-  lutist.setFrameDelay(0,20);
-  drummer.setFrameDelay(1,5);
-  
-  SongAudio = new SoundFile(this, sketchPath("data/SongAudio/" + currentSong + ".mp3"));
-  Song = getSong(currentSong + ".txt");
-  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySprites, centerX , centerY  - height /2);
-  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, centerX ,  centerY + height /2);
-  leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, centerX  - height /2,  centerY );
-  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[2  ], speed, drummerSprites, centerX + height /2,  centerY );
-  
 
-  
+  drummer.setFrameDelay(0, 20);
+  flautist.setFrameDelay(0, 20);
+  harpist.setFrameDelay(0, 20);
+  lutist.setFrameDelay(0, 20);
+  drummer.setFrameDelay(1, 5);
+
+  SoundFile currentSong = activeItem == null? new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3")) : activeItem.song;
+  SongAudio = currentSong;
+  Song = getSong(activeItem.file + ".txt");
+  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySprites, centerX, centerY  - height /2);
+  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, centerX, centerY + height /2);
+  leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, centerX  - height /2, centerY );
+  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[2  ], speed, drummerSprites, centerX + height /2, centerY );
+
+
+
   int offset = height/4;
   ArrayList<PImage[]> sigil = new ArrayList<PImage[]>();
   sigil.add(loadImagesFromFolder(sketchPath("data/Sigils")));
   sigils = new Entity[4];
-  sigils[0] = new Entity(this, sigil, centerX  + offset, centerY , 128, 128);
-  sigils[1] = new Entity(this, sigil, centerX  - offset, centerY  , 128, 128);
-  sigils[2] = new Entity(this, sigil, centerX  , centerY  - offset, 128, 128);
-  sigils[3] = new Entity(this, sigil, centerX  , centerY + offset, 128, 128);
+  sigils[0] = new Entity(this, sigil, centerX  + offset, centerY, 128, 128);
+  sigils[1] = new Entity(this, sigil, centerX  - offset, centerY, 128, 128);
+  sigils[2] = new Entity(this, sigil, centerX, centerY  - offset, 128, 128);
+  sigils[3] = new Entity(this, sigil, centerX, centerY + offset, 128, 128);
   gameLoaded = true;
-  
 }
 void setupAnim()
 {
@@ -151,61 +156,56 @@ void setupAnim()
 
 void draw() {
   dt = (System.currentTimeMillis() - t)/1000;
-  dt =1;
   t = System.currentTimeMillis();
-  if (transition) 
+  if (transition)
   {
 
-    if(counter <= 0)
+    if (counter <= 0)
     {
-      counter +=1;
+      counter +=2;
       rectMode(CORNER);
       fill(0);
       alpha = constrain(alpha +1, 0, 255);
       tint(alpha);
-      rect(counter * 8, 0, 1920, 1080);
+      rect(counter * 8, 0, 2880, 1080, 300);
     }
-    if (counter <= 240 && counter > 0)
+    if (counter <= 360 && counter > 0)
     {
-      counter +=1;
+      counter +=2;
       switch(Scene)
       {
-        case 0:
-          MainMenu();
-          break;
-        case 1:
-          if (gameLoaded) GameLoop();
-          break;
+      case 0:
+        MainMenu();
+        break;
+      case 1:
+        if (gameLoaded) GameLoop();
+        break;
       }
       rectMode(CORNER);
       fill(0);
       alpha = constrain(alpha -1, 0, 255);
       tint(alpha);
-      rect(counter * 8, 0, 1920, 1080);
-
+      rect(counter * 8, 0, 2880, 1080, 300);
     }
-    if (counter == 240)
+    if (counter == 360)
     {
       transition = false;
-      counter = 0;
+      counter = -360;
       alpha = 0;
     }
-    tint(255,255,255);
-  }
-  else
+    tint(255, 255, 255);
+  } else if (!pause)
   {
-      switch(Scene)
-      {
-        case 0:
-          MainMenu();
-          break;
-        case 1:
-          if (gameLoaded) GameLoop();
-          break;
-      }
+    switch(Scene)
+    {
+    case 0:
+      MainMenu();
+      break;
+    case 1:
+      if (gameLoaded) GameLoop();
+      break;
+    }
   }
-    
-
 }
 
 void GameLoop()
@@ -218,8 +218,12 @@ void GameLoop()
   }
   if (transition == false)
   {
-    offset++;
-    if (offset == (int)((height * 0.25f) / (float)(speed * dt))) SongAudio.play();
+    frames++;
+    if (testNote == false)
+    {
+      tester = rightPlayer.testNote();
+      testNote = true;
+    }
     topPlayer.update();
     bottomPlayer.update();
     leftPlayer.update();
@@ -230,6 +234,22 @@ void GameLoop()
     checkCenterHits(rightPlayer);
     centerPoint.drawSprite();
     centerPoint.drawHitbox(this);
+
+    if (tester != null  && gameStart == false)
+    {
+      tester.move((float)(-1 * speed * dt), 0);
+      tester.drawHitbox(this);
+      if ((int)tester.getX() <= (int)sigils[0].getX())
+      {
+        SongAudio.play();
+        tester = null;
+        offset += 20;
+        gameStart = true;
+      } else
+      {
+        offset++;
+      }
+    }
   }
 
 
@@ -237,7 +257,7 @@ void GameLoop()
   for (Entity z : hitZones) {
     z.drawHitbox(this);
   }
-  
+
   harpist.drawSprite();
   image(crystal, width/2-64-8, height/2-64-8);
   drummer.drawSprite();
@@ -245,7 +265,7 @@ void GameLoop()
   lutist.drawSprite();
   hitZones.clear();
   image(bgo, 0, 0);
-  if ((offset - (int)(height * 0.25f) / speed * dt) >= finalNote) 
+  if (frames - offset >= finalNote)
   {
     gameOver = true;
     drawEnd();
@@ -275,28 +295,39 @@ void MainMenu()
     items.get(i).display(alpha);
     popMatrix();
 
-    if (distToCenter < closestDist) 
-    {  
-       closestDist = distToCenter;
-       activeItem = items.get(i);
-     }
+    if (distToCenter < closestDist)
+    {
+      closestDist = distToCenter;
+      activeItem = items.get(i);
+    }
   }
-  if (activeItem != null && activeItem.sound != null && !activeItem.sound.isPlaying() && cur != null && activeItem.label != cur.label) 
-   {
-      cur.sound.jump(0);
-      cur.sound.pause();
-      activeItem.sound.play();
-   }  
+  if (activeItem != null && cur != null && activeItem.label != cur.label)
+  {
+    cur.sound.jump(0);
+    cur.sound.pause();
+    timeOn = 0;
+    played = false;
+  }
+  if (!played)
+  {
+    timeOn += dt;
+  }
+
+  if (played == false && timeOn > 1 && activeItem != null&& activeItem.sound != null && !activeItem.sound.isPlaying())
+  {
+    activeItem.sound.play();
+    played = true;
+  }
+
   drawPlayButton();
   drawImage();
-  
 }
-void drawImage(){
-  
+void drawImage() {
+
   if (Scene == 0 && activeItem != null)
   {
     rectMode(CENTER);
-    tint(255,255,255);
+    tint(255, 255, 255);
     image(activeItem.img, playButtonX, playButtonY -450, 600, 600);
   }
 }
@@ -324,31 +355,33 @@ void drawEnd() {
 void mousePressed() {
   if (Scene == 0)
   {
-      if (mouseX > playButtonX - playButtonW/2 &&
+    if (mouseX > playButtonX - playButtonW/2 &&
       mouseX < playButtonX + playButtonW/2 &&
       mouseY > playButtonY - playButtonH/2 &&
-      mouseY < playButtonY + playButtonH/2) 
+      mouseY < playButtonY + playButtonH/2)
+    {
+      if (activeItem != null)
       {
-        if (activeItem != null) 
-        {
-          transition = true;
-          switchScene(activeItem);
-        }
+        transition = true;
+        activeItem.sound.jump(0);
+        activeItem.sound.pause();
+        switchScene(activeItem);
       }
+    }
   }
   if (Scene == 1 && gameOver)
   {
-      if (mouseX > width/2 - playButtonW/2 &&
+    if (mouseX > width/2 - playButtonW/2 &&
       mouseX < width/2 + playButtonW/2 &&
       mouseY > height/2 - playButtonH/2 &&
-      mouseY < height/2 + playButtonH/2) 
+      mouseY < height/2 + playButtonH/2)
+    {
+      if (activeItem != null)
       {
-        if (activeItem != null) 
-        {
-          transition = true;
-          resetScene();
-        }
+        transition = true;
+        resetScene();
       }
+    }
   }
 }
 void resetScene()
@@ -360,10 +393,13 @@ void resetScene()
   gameLoaded = false;
   finalNote = 0;
   Scene = 0;
+  tester = null;
+  testNote = false;
+  frames = 0;
 }
 
 
-void mouseWheel(MouseEvent event) 
+void mouseWheel(MouseEvent event)
 {
   float e = event.getCount();
   targetScrollY += e * scrollSpeed;
@@ -378,19 +414,30 @@ void switchScene(MenuItem activeItem)
   imageMode(CORNER);
   rectMode(CORNER);
   LoadGame();
-  
 }
 
 
 void keyPressed() {
   if (Scene == 1)
   {
+    if (keyCode == ESC || key == 'p' || key == 'P') {
+      key = 0;
+      if (gameStart)
+      {
+        pause = !pause;
+        if (pause) {
+          pauseTime = SongAudio.position(); // get current position in seconds
+          SongAudio.pause();
+        } else {
+          SongAudio.cue(pauseTime); // resume from where we paused
+          SongAudio.play();
+        }
+      }
+    }
     keysDown.add((int)keyCode);
     checkDirectionalHits();
     keysDown.remove((int)keyCode);
   }
-    
-
 }
 
 

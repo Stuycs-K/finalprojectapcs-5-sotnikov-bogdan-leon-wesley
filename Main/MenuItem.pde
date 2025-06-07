@@ -1,16 +1,25 @@
 class MenuItem {
   String label;
+  String file;
   PImage img;
   SoundFile sound;
+  SoundFile song;
   float buttonW = 260;
   float buttonH = 60;
-  float imgSize = 100;
+  float imgSize = 600;
+  PImage thumbnail;
 
-  MenuItem(String label, PImage img, SoundFile sound) {
+  MenuItem(String label, PImage img, SoundFile sound, SoundFile song, String file) {
     this.label = label;
     this.img = img;
     this.sound = sound;
-    img.resize((int)imgSize, (int)imgSize);
+    this.song = song;
+    this.file = file;
+    this.img.resize((int)imgSize, (int)imgSize);
+    
+    thumbnail = img.copy();
+    thumbnail.resize(100, 100);
+
   }
 
   void display(float alpha) {
@@ -24,6 +33,6 @@ class MenuItem {
 
     imageMode(CENTER);
     tint(255, alpha);
-    image(img, 130, 0);
+    image(thumbnail, 130, 0);
   }
 }
