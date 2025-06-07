@@ -4,14 +4,14 @@ class Note extends Entity {
   private boolean isFinished = false;
   private int hitAnimIndex = 0;
   
-  Note(PApplet applet, ArrayList<PImage[]> sprites, int[]frameTime, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
+  Note(PApplet applet, ArrayList<PImage[]> sprites, int[]frameTime, float xPos, float yPos, int hitboxWidth, int hitboxHeight) {
     super(applet, sprites, frameTime, xPos, yPos, hitboxWidth, hitboxHeight);
   }
-  Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
+  Note(PApplet applet, ArrayList<PImage[]> sprites, float xPos, float yPos, int hitboxWidth, int hitboxHeight) {
     super(applet, sprites, xPos, yPos, hitboxWidth, hitboxHeight);
   }
 
-  Note(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos) {
+  Note(PApplet applet, ArrayList<PImage[]> sprites, float xPos, float yPos) {
     this(applet, sprites, xPos, yPos, 0, 0);
   }
 
@@ -51,7 +51,7 @@ class Note extends Entity {
   }
   public int calculateScore(Entity other)
   {  
-    return 1000 / (Math.abs((pos[0] - other.getX())) +1) + 1000 / (Math.abs((pos[1] - other.getY())) +1);
+    return (int)(1000 / (Math.abs((pos[0] - other.getX())) +1) + 1000 / (Math.abs((pos[1] - other.getY())) +1));
   }
 
   public boolean isHit() {

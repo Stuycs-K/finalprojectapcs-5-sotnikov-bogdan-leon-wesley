@@ -38,7 +38,8 @@ class NotePlayer {
     for (int i = notes.size() - 1; i >= 0; i--) {
       Note n = notes.get(i);
       if (!n.isHit()) {
-        n.move(direction[0] * (int)(speed * dt), direction[1] * speed);
+        n.move((float)(direction[0] * speed * dt), (float)(direction[1] * speed * dt));
+        println(dt);
       }
       n.drawSprite();
       n.drawHitbox(applet);

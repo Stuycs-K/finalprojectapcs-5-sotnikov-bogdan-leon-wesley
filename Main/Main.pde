@@ -10,7 +10,7 @@ NotePlayer topPlayer, bottomPlayer, leftPlayer, rightPlayer;
 Entity centerPoint;
 ArrayList<PImage[]> dummySprites;
 int[][] Song;
-int speed = 2;
+int speed = 120;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg, bgo, crystal;
@@ -46,6 +46,8 @@ int counter = -240;
 int alpha = 0;
 static double dt;
 double t;
+
+
 
 void setup() {
   size(1920, 1080);
@@ -148,7 +150,8 @@ void setupAnim()
 }
 
 void draw() {
-  dt = System.currentTimeMillis() - t;
+  dt = (System.currentTimeMillis() - t)/1000;
+  dt =1;
   t = System.currentTimeMillis();
   if (transition) 
   {
@@ -216,7 +219,7 @@ void GameLoop()
   if (transition == false)
   {
     offset++;
-    if (offset == (int)((height * 0.25f) / speed * dt)) SongAudio.play();
+    if (offset == (int)((height * 0.25f) / (float)(speed * dt))) SongAudio.play();
     topPlayer.update();
     bottomPlayer.update();
     leftPlayer.update();
@@ -408,8 +411,8 @@ void checkDirectionalHits() {
 }
 
 void createHitZoneAndCheck(NotePlayer player, int dx, int dy, char pressedKey) {
-  int x = centerPoint.getX() + dx * height /4;
-  int y = centerPoint.getY() + dy * height /4;
+  float x = centerPoint.getX() + dx * height /4;
+  float y = centerPoint.getY() + dy * height /4;
 
   Entity zone = new Entity(this, dummySprites, x, y, 128, 128);
   hitZones.add(zone);

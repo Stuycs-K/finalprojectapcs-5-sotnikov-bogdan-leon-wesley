@@ -1,8 +1,8 @@
 class Entity {
   protected PApplet applet;
   
-  protected int[] pos = new int[2];
-  protected int[] center = new int[2];
+  protected float[] pos = new float[2];
+  protected float[] center = new float[2];
   
   protected ArrayList<PImage[]> frames;
   protected int anims;
@@ -20,7 +20,7 @@ class Entity {
 
   // Constructors
 
-  Entity(PApplet applet, ArrayList<PImage[]> sprites, int[] speeds, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
+  Entity(PApplet applet, ArrayList<PImage[]> sprites, int[] speeds, float xPos, float yPos, int hitboxWidth, int hitboxHeight) {
     this.applet = applet;  // save PApplet
     frames = sprites;
     anims = sprites.size();
@@ -32,7 +32,7 @@ class Entity {
     center[1] = hitboxHeight / 2;
     frameDelays = speeds;
   }
-  Entity(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos, int hitboxWidth, int hitboxHeight) {
+  Entity(PApplet applet, ArrayList<PImage[]> sprites, float xPos, float yPos, int hitboxWidth, int hitboxHeight) {
     this.applet = applet;  // save PApplet
     frames = sprites;
     anims = sprites.size();
@@ -46,7 +46,7 @@ class Entity {
     Arrays.fill(frameDelays, 20);
   }
 
-  Entity(PApplet applet, ArrayList<PImage[]> sprites, int xPos, int yPos) {
+  Entity(PApplet applet, ArrayList<PImage[]> sprites, float xPos, float yPos) {
     this(applet, sprites, xPos, yPos, 0, 0);
   }
 
@@ -63,17 +63,17 @@ class Entity {
     hitboxHeight = h;
   }
   
-  int getX(){
+  float getX(){
     return pos[0];
   }
-  int getY(){ 
+  float getY(){ 
     return pos[1];
   }
 
-  int[] getHitbox() {
-    int cx = pos[0] - center[0];
-    int cy = pos[1] - center[1];
-    return new int[] {
+  float[] getHitbox() {
+    float cx = pos[0] - center[0];
+    float cy = pos[1] - center[1];
+    return new float[] {
       cx,
       cy,
       hitboxWidth,
@@ -83,8 +83,8 @@ class Entity {
 
 
   boolean intersects(Entity other) {
-  int[] hb1 = this.getHitbox();
-  int[] hb2 = other.getHitbox();
+  float[] hb1 = this.getHitbox();
+  float[] hb2 = other.getHitbox();
   return !(hb1[0] + hb1[2] < hb2[0] ||
            hb1[0] > hb2[0] + hb2[2] ||
            hb1[1] + hb1[3] < hb2[1] ||
@@ -121,7 +121,7 @@ class Entity {
     }
   }
 
-  void move(int x, int y) {
+  void move(float x, float y) {
     pos[0] += x;
     pos[1] += y;
   }
@@ -133,7 +133,7 @@ class Entity {
   public void drawHitbox(PApplet applet) {
     applet.noFill();
     applet.stroke(0, 255, 0);
-    int[] hb = getHitbox();
+    float[] hb = getHitbox();
     applet.rect(hb[0], hb[1], hb[2], hb[3]);
   }
 }
