@@ -115,6 +115,9 @@ void LoadGame()
   harpist.setFrameDelay(0, 20);
   lutist.setFrameDelay(0, 20);
   drummer.setFrameDelay(1, 5);
+  flautist.setFrameDelay(1, 5);
+  lutist.setFrameDelay(1, 5);
+  harpist.setFrameDelay(1, 5);
 
   SoundFile currentSong = activeItem == null? new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3")) : activeItem.song;
   SongAudio = currentSong;
@@ -444,12 +447,15 @@ void keyPressed() {
 void checkDirectionalHits() {
   if (keysDown.contains((int)'W') || keysDown.contains(UP)) {
     createHitZoneAndCheck(topPlayer, 0, -1, 'w');
+    harpist.setAnim(1);
   }
   if (keysDown.contains((int)'S') || keysDown.contains(DOWN)) {
     createHitZoneAndCheck(bottomPlayer, 0, 1, 's');
+    lutist.setAnim(1);
   }
   if (keysDown.contains((int)'A') || keysDown.contains(LEFT)) {
     createHitZoneAndCheck(leftPlayer, -1, 0, 'a');
+    flautist.setAnim(1);
   }
   if (keysDown.contains((int)'D') || keysDown.contains(RIGHT)) {
     createHitZoneAndCheck(rightPlayer, 1, 0, 'd');
