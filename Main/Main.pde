@@ -125,7 +125,7 @@ void LoadGame()
   topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySpritesD, centerX, centerY  - height /2);
   bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, enemySpritesU, centerX, centerY + height /2);
   leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, centerX  - height /2, centerY );
-  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[2  ], speed, drummerSprites, centerX + height /2, centerY );
+  rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[2  ], speed, enemySpritesL, centerX + height /2, centerY );
 
 
 
@@ -157,6 +157,8 @@ void setupAnim()
   enemySpritesD.add(loadImagesFromFolder(sketchPath("data/Enemy/WalkDown")));
   enemySpritesU = new ArrayList<PImage[]>();
   enemySpritesU.add(loadImagesFromFolder(sketchPath("data/Enemy/WalkUp")));
+  enemySpritesL = new ArrayList<PImage[]>();
+  enemySpritesL.add(loadImagesFromFolder(sketchPath("data/Enemy/WalkLeft")));
 }
 
 void draw() {

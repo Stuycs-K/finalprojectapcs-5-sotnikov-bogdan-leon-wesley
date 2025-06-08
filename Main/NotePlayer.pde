@@ -28,7 +28,7 @@ class NotePlayer {
       if (spawnFrames[framesPlayed] > 0)
       {
         Note n = new Note(applet, sprites,frameTime, startX, startY, 128, 128);
-        n.setFrameDelay(0, 5);
+        n.setFrameDelay(0, 10);
         notes.add(n);
       }
        
