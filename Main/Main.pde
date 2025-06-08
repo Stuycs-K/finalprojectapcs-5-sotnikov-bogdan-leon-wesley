@@ -13,7 +13,7 @@ int[][] Song;
 int speed = 120;
 HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
-PImage bg, bgo, crystal;
+PImage bg, bgo, crystal, bubble;
 int score = 0;
 ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites, enemySpritesU, enemySpritesD, enemySpritesL, enemySpritesR;
 Entity[] sigils;
@@ -91,6 +91,7 @@ void LoadGame()
 {
   bg = loadImage(sketchPath("data/Background.png"));
   bgo = loadImage(sketchPath("data/BackgroundOverlay.png"));
+  bubble = loadImage(sketchPath("data/Bubble.png"));
   crystal = loadImage(sketchPath("data/crystal.png"));
   dummySprites = new ArrayList<PImage[]>();
   dummySprites.add( new PImage[] {createImage(32, 32, RGB)});
@@ -274,6 +275,7 @@ void GameLoop()
   lutist.drawSprite();
   hitZones.clear();
   image(bgo, 0, 0);
+  image(bubble, width/2-225, height/2-185);
   if (frames - offset >= finalNote)
   {
     gameOver = true;
