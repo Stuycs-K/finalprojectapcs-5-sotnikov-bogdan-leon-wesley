@@ -15,7 +15,7 @@ HashSet<Integer> keysDown = new HashSet<Integer>();
 ArrayList<Entity> hitZones = new ArrayList<Entity>();
 PImage bg, bgo, crystal;
 int score = 0;
-ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites, enemySprites;
+ArrayList<PImage[]> drummerSprites, flautistSprites, lutistSprites, harpistSprites, enemySpritesU, enemySpritesD, enemySpritesL, enemySpritesR;
 Entity[] sigils;
 Entity drummer, flautist, harpist, lutist;
 SoundFile SongAudio;
@@ -122,8 +122,8 @@ void LoadGame()
   SoundFile currentSong = activeItem == null? new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3")) : activeItem.song;
   SongAudio = currentSong;
   Song = getSong(activeItem.file + ".txt");
-  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySprites, centerX, centerY  - height /2);
-  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, lutistSprites, centerX, centerY + height /2);
+  topPlayer = new NotePlayer(this, new int[]{0, 1}, Song[1], speed, enemySpritesD, centerX, centerY  - height /2);
+  bottomPlayer = new NotePlayer(this, new int[]{0, -1}, Song[3], speed, enemySpritesU, centerX, centerY + height /2);
   leftPlayer = new NotePlayer(this, new int[]{1, 0}, Song[0], speed, flautistSprites, centerX  - height /2, centerY );
   rightPlayer = new NotePlayer(this, new int[]{-1, 0}, Song[2  ], speed, drummerSprites, centerX + height /2, centerY );
 
@@ -153,8 +153,10 @@ void setupAnim()
   harpistSprites = new ArrayList<PImage[]>();
   harpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Idle")));
   harpistSprites.add(loadImagesFromFolder(sketchPath("data/Harpist/Atk1")));
-  enemySprites = new ArrayList<PImage[]>();
-  enemySprites.add(loadImagesFromFolder(sketchPath("data/Enemy/WalkDown")));
+  enemySpritesD = new ArrayList<PImage[]>();
+  enemySpritesD.add(loadImagesFromFolder(sketchPath("data/Enemy/WalkDown")));
+  enemySpritesU = new ArrayList<PImage[]>();
+  enemySpritesU.add(loadImagesFromFolder(sketchPath("data/Enemy/WalkUp")));
 }
 
 void draw() {
