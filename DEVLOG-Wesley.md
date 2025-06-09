@@ -38,3 +38,7 @@ it was a saturday
 
 ### 2025-6-8 - Pause System Fix
 added pause system and fixed bugs
+
+I believe this document accurately reflects the contributions of my teamate.
+
+-Bogdan Sotnikov
