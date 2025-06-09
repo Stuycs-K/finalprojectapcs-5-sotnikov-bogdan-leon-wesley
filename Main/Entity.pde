@@ -71,8 +71,8 @@ class Entity {
   }
 
   float[] getHitbox() {
-    float cx = pos[0] - center[0];
-    float cy = pos[1] - center[1];
+    float cx = pos[0] - hitboxWidth / 2;
+    float cy = pos[1] - hitboxHeight / 2;
     return new float[] {
       cx,
       cy,
@@ -120,7 +120,11 @@ class Entity {
       frameCounter = 0;
     }
   }
-
+  void setCenter(float x, float y)
+  {
+    center[0] = x;
+    center[1] = y;
+  }
   void move(float x, float y) {
     pos[0] += x;
     pos[1] += y;
