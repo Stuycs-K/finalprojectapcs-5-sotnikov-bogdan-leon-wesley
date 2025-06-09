@@ -132,7 +132,8 @@ void LoadGame()
 
   int offset = height/4;
   ArrayList<PImage[]> sigil = new ArrayList<PImage[]>();
-  sigil.add(loadImagesFromFolder(sketchPath("data/Sigils")));
+  sigil.add(loadImagesFromFolder(sketchPath("data/Sigils/Idle")));
+  sigil.add(loadImagesFromFolder(sketchPath("data/Sigils/Burn")));
   sigils = new Entity[4];
   sigils[0] = new Entity(this, sigil, centerX  + offset, centerY, 128, 128);
   sigils[1] = new Entity(this, sigil, centerX  - offset, centerY, 128, 128);
