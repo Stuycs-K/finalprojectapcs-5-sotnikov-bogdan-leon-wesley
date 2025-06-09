@@ -250,7 +250,7 @@ void GameLoop()
     checkCenterHits(leftPlayer);
     checkCenterHits(rightPlayer);
     centerPoint.drawSprite();
-    centerPoint.drawHitbox(this);
+    //centerPoint.drawHitbox(this);
 
     if (tester != null  && gameStart == false)
     {
@@ -271,9 +271,9 @@ void GameLoop()
 
 
 
-  for (Entity z : hitZones) {
+  /*for (Entity z : hitZones) {
     z.drawHitbox(this);
-  }
+  }*/
 
   harpist.drawSprite();
   image(crystal, width/2-64-8, height/2-64-8);
