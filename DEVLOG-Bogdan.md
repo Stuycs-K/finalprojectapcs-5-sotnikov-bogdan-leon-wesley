@@ -30,3 +30,4 @@ Working on character, enemy, background art.
 Cleaning up the game, implementing art, fixing songs.
 
 this is quite accurate indeed - wesley
+I believe this document accurately reflects the contributions of my teamate.
