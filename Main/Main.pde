@@ -9,6 +9,7 @@ import java.util.Arrays;
 NotePlayer topPlayer, bottomPlayer, leftPlayer, rightPlayer;
 Entity centerPoint;
 ArrayList<PImage[]> dummySprites;
+ArrayList<PImage[]> bubbleSprites;
 int[][] Song;
 int speed = 120;
 HashSet<Integer> keysDown = new HashSet<Integer>();
@@ -69,12 +70,12 @@ void setup() {
     textSize(20);
     smooth();
 
-    items.add(new MenuItem("Bad Apple", loadImage(sketchPath("data/MenuItems/tester.jpg")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3")), "BadApple"));
+    items.add(new MenuItem("Bad Apple", loadImage(sketchPath("data/MenuItems/BadApple_thumbnail.png")), new SoundFile(this, sketchPath("data/MenuItems/BadApple_snippet.mp3")), new SoundFile(this, sketchPath("data/SongAudio/BadApple.mp3")), "BadApple"));
     items.add(new MenuItem("ksi", loadImage(sketchPath("data/MenuItems/ksi_thumbnail.png")), new SoundFile(this, sketchPath("data/MenuItems/ksi_snippet.mp3")), new SoundFile(this, sketchPath("data/SongAudio/ksi.mp3")), "ksi"));
     items.add(new MenuItem("Machine Love (feat. Teto)", loadImage(sketchPath("data/MenuItems/machinelove_thumbnail.png")),
       new SoundFile(this, sketchPath("data/MenuItems/machinelove_snippet.mp3")), new SoundFile(this, sketchPath("data/SongAudio/Machine Love (feat. Kasane Teto).mp3")), "MachineLove"));
     items.add(new MenuItem("Prokofiev", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/Prokofiev.mp3")), "Prokofiev"));
-    items.add(new MenuItem("ploopy", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/ploopy.mp3")), "ploopy"));
+    items.add(new MenuItem("Audio Sync Demo", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/ploopy.mp3")), "ploopy"));
   }
   // dummy code to keep func, can remove
   if (Scene == 1)
@@ -102,15 +103,19 @@ void LoadGame()
   dummySprites.get(0)[0].updatePixels();
 
   setupAnim();
-
+  bubbleSprites = new ArrayList<PImage[]>();
+  bubbleSprites.add(loadImagesFromFolder(sketchPath("data/Bubble/Idle")));
+  bubbleSprites.add(loadImagesFromFolder(sketchPath("data/Bubble/Active")));
+  
   int centerX = width /2;
   int centerY = height/2;
-  centerPoint = new Entity(this, dummySprites, centerX, centerY, 256, 256);
+  centerPoint = new Entity(this, bubbleSprites, centerX, centerY, 256, 256);
   drummer = new Entity(this, drummerSprites, centerX + 96, centerY, 128, 128);
   flautist = new Entity(this, flautistSprites, centerX -96, centerY, 128, 128);
   harpist = new Entity(this, harpistSprites, centerX, centerY - 96, 128, 128);
   lutist = new Entity(this, lutistSprites, centerX, centerY + 96, 128, 128);
-
+  
+  centerPoint.setFrameDelay(1,5);
   drummer.setFrameDelay(0, 20);
   flautist.setFrameDelay(0, 20);
   harpist.setFrameDelay(0, 20);
@@ -178,7 +183,7 @@ void draw() {
       fill(0);
       alpha = constrain(alpha +1, 0, 255);
       tint(alpha);
-      rect(counter * 8, 0, 2880, 1080, 300);
+      rect(counter * 8, 0, 2880, 1080);
     }
     if (counter <= 360 && counter > 0)
     {
@@ -196,16 +201,17 @@ void draw() {
       fill(0);
       alpha = constrain(alpha -1, 0, 255);
       tint(alpha);
-      rect(counter * 8, 0, 2880, 1080, 300);
+      rect(counter * 8, 0, 2880, 1080);
     }
-    if (counter == 360)
+    if (counter >= 360)
     {
       transition = false;
       counter = -360;
       alpha = 0;
     }
     tint(255, 255, 255);
-  } else if (!pause)
+  } 
+  else if (!pause)
   {
     switch(Scene)
     {
@@ -249,7 +255,7 @@ void GameLoop()
     if (tester != null  && gameStart == false)
     {
       tester.move((float)(-1 * speed * dt), 0);
-      tester.drawHitbox(this);
+      //tester.drawHitbox(this);
       if ((int)tester.getX() <= (int)sigils[0].getX())
       {
         SongAudio.play();
@@ -325,7 +331,7 @@ void MainMenu()
     timeOn += dt;
   }
 
-  if (played == false && timeOn > 1 && activeItem != null&& activeItem.sound != null && !activeItem.sound.isPlaying())
+  if (played == false && timeOn > 0.5 && activeItem != null&& activeItem.sound != null && !activeItem.sound.isPlaying())
   {
     activeItem.sound.play();
     played = true;
@@ -352,6 +358,7 @@ void drawPlayButton() {
     rect(playButtonX, playButtonY, playButtonW, playButtonH, 10);
     fill(255);
     text("Play", playButtonX, playButtonY);
+    rectMode(CORNER);
   }
 }
 void drawEnd() {
@@ -362,9 +369,11 @@ void drawEnd() {
   fill(255);
   text("Main Menu", width/2, height/2);
   text("Score:" + score, width/2, height/2 - 200);
+  rectMode(CORNER);
 }
 
 void mousePressed() {
+  if (transition) return;
   if (Scene == 0)
   {
     if (mouseX > playButtonX - playButtonW/2 &&
@@ -381,7 +390,7 @@ void mousePressed() {
       }
     }
   }
-  if (Scene == 1 && gameOver)
+  if (Scene == 1 && (gameOver || pause))
   {
     if (mouseX > width/2 - playButtonW/2 &&
       mouseX < width/2 + playButtonW/2 &&
@@ -402,12 +411,16 @@ void resetScene()
   offset = 0;
   targetScrollY = 0;
   gameOver = false;
+  gameStart = false;
   gameLoaded = false;
   finalNote = 0;
   Scene = 0;
   tester = null;
   testNote = false;
   frames = 0;
+  pauseTime = 0;
+  SongAudio.cue(pauseTime);
+  pause = false;
 }
 
 
@@ -440,6 +453,7 @@ void keyPressed() {
         if (pause) {
           pauseTime = SongAudio.position(); // get current position in seconds
           SongAudio.pause();
+          drawEnd();
         } else {
           SongAudio.cue(pauseTime); // resume from where we paused
           SongAudio.play();
@@ -495,6 +509,7 @@ void checkCenterHits(NotePlayer player) {
     Note n = notes.get(i);
     if (n.intersects(centerPoint) && !n.isHit()) {
       n.hit(' '); // Default key when hit from center
+      centerPoint.setAnim(1);
     }
     if (n.isFinished()) {
       notes.remove(i);

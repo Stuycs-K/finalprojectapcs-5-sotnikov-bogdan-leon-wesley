@@ -130,6 +130,6 @@ if __name__ == "__main__":
 
 # How to use for bogden ->
 # paste in terminal python SongConverter.py --mode midi --input Main/data/SongAudio/[whatever].mid
-# or python SongConverter.py --mode audio --input Main/data/SongAudio/[whatever].mp3
+# or python SongConverter.py --mode audio --input Main/data/SongAudio/[whatever].mp3 --filter True
 # make sure u install the stuff
 # pip install np mido librosa
