@@ -28,3 +28,5 @@ Working on character, enemy, background art.
 
 ### 2025-06-08 - Finishing
 Cleaning up the game, implementing art, fixing songs.
+
+this is quite accurate indeed - wesley
