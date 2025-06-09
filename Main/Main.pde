@@ -74,8 +74,10 @@ void setup() {
     items.add(new MenuItem("ksi", loadImage(sketchPath("data/MenuItems/ksi_thumbnail.png")), new SoundFile(this, sketchPath("data/MenuItems/ksi_snippet.mp3")), new SoundFile(this, sketchPath("data/SongAudio/ksi.mp3")), "ksi"));
     items.add(new MenuItem("Machine Love (feat. Teto)", loadImage(sketchPath("data/MenuItems/machinelove_thumbnail.png")),
       new SoundFile(this, sketchPath("data/MenuItems/machinelove_snippet.mp3")), new SoundFile(this, sketchPath("data/SongAudio/Machine Love (feat. Kasane Teto).mp3")), "MachineLove"));
-    items.add(new MenuItem("Prokofiev", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/Prokofiev.mp3")), "Prokofiev"));
+    items.add(new MenuItem("Prokofiev", loadImage(sketchPath("data/MenuItems/prk_thunmbnail.png")), new SoundFile(this, sketchPath("data/MenuItems/prk_snippet.wav")), new SoundFile(this, sketchPath("data/SongAudio/Prokofiev.mp3")), "Prokofiev"));
+    items.add(new MenuItem("Snail's House - life with u", loadImage(sketchPath("data/MenuItems/lifewyou_thumbnail.png")), new SoundFile(this, sketchPath("data/MenuItems/lifewyou_snippet.mp3")), new SoundFile(this, sketchPath("data/SongAudio/Snail's House - life with u.mp3")), "lifewyou"));
     items.add(new MenuItem("Audio Sync Demo", loadImage(sketchPath("data/MenuItems/example.png")), new SoundFile(this, sketchPath("data/MenuItems/example.wav")), new SoundFile(this, sketchPath("data/SongAudio/ploopy.mp3")), "ploopy"));
+    
   }
   // dummy code to keep func, can remove
   if (Scene == 1)
