@@ -108,7 +108,6 @@ class Entity {
     if (anim != curAnim) {
       setAnim(anim);
     }
-
     image(frames.get(anim)[curSprite], pos[0] - center[0], pos[1] - center[1]);
     frameCounter++;
     if (frameCounter >= frameDelay) {
