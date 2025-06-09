@@ -2,7 +2,9 @@
 # Technical Details:
 
 PERIOD 5
+
 Wesley Leon and Bogdan Sotnikov
+
 Team name: "Team Name"
 
      
@@ -38,11 +40,11 @@ UML Diagrams and descriptions of key algorithms, classes, and how things fit tog
 Four characters at center
 
 Class for notes - method to play the note when hit
-Class for attacks - Projectiles - contain XY info
+~Class for attacks - Projectiles - contain XY info~ Attacks are an entity like other objects now.
 
 Attacks play notes when attack.pos lies within note.hit
 
-Character instantiate - assigns 2 attacks as variables - assigns them to keybinds
+Character instantiate - assigns ~2 attacks~ 1 attack as variables - assigns them to keybinds
 WASD and ARROWS
 Add additional UI toggle for traditional asdf hjkl binding
 
