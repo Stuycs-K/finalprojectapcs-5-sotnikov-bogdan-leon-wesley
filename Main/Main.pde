@@ -283,6 +283,8 @@ void GameLoop()
   hitZones.clear();
   image(bgo, 0, 0);
   image(bubble, width/2-225, height/2-185);
+  fill(256);
+  text(score, 20, 20);
   if (frames - offset >= finalNote)
   {
     gameOver = true;
