@@ -19,3 +19,12 @@ Fixed the music files and tried to fix the note generator
 
 ### 2025-06-02 - Art
 Implementing and fixing more visuals
+
+### 2025-06-03 - Midi decoder
+Working on fixing the script that turns midis into text files for the game
+
+### 2025-06-(04-07) - Art
+Working on character, enemy, background art.
+
+### 2025-06-08 - Finishing
+Cleaning up the game, implementing art, fixing songs.
