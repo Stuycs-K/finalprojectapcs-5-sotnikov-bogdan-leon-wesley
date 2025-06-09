@@ -42,7 +42,7 @@ class NotePlayer {
         n.move((float)(direction[0] * speed * dt), (float)(direction[1] * speed * dt));
       }
       n.drawSprite();
-      n.drawHitbox(applet);
+      //n.drawHitbox(applet);
 
       if (n.isFinished()) {
         notes.remove(i);
