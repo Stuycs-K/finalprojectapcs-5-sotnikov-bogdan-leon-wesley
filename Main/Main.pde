@@ -115,6 +115,7 @@ void LoadGame()
   harpist = new Entity(this, harpistSprites, centerX, centerY - 96, 128, 128);
   lutist = new Entity(this, lutistSprites, centerX, centerY + 96, 128, 128);
   
+  centerPoint.setCenter(150f,150f);
   centerPoint.setFrameDelay(1,5);
   drummer.setFrameDelay(0, 20);
   flautist.setFrameDelay(0, 20);
@@ -144,6 +145,10 @@ void LoadGame()
   sigils[1] = new Entity(this, sigil, centerX  - offset, centerY, 128, 128);
   sigils[2] = new Entity(this, sigil, centerX, centerY  - offset, 128, 128);
   sigils[3] = new Entity(this, sigil, centerX, centerY + offset, 128, 128);
+  for (Entity s : sigils)
+  {
+    s.setFrameDelay(1,2);
+  }
   gameLoaded = true;
 }
 void setupAnim()
@@ -282,7 +287,6 @@ void GameLoop()
   lutist.drawSprite();
   hitZones.clear();
   image(bgo, 0, 0);
-  image(bubble, width/2-225, height/2-185);
   fill(256);
   text(score, 20, 20);
   if (frames - offset >= finalNote)
@@ -473,18 +477,22 @@ void checkDirectionalHits() {
   if (keysDown.contains((int)'W') || keysDown.contains(UP)) {
     createHitZoneAndCheck(topPlayer, 0, -1, 'w');
     harpist.setAnim(1);
+    sigils[2].setAnim(1);
   }
   if (keysDown.contains((int)'S') || keysDown.contains(DOWN)) {
     createHitZoneAndCheck(bottomPlayer, 0, 1, 's');
     lutist.setAnim(1);
+    sigils[3].setAnim(1);
   }
   if (keysDown.contains((int)'A') || keysDown.contains(LEFT)) {
     createHitZoneAndCheck(leftPlayer, -1, 0, 'a');
     flautist.setAnim(1);
+    sigils[1].setAnim(1);
   }
   if (keysDown.contains((int)'D') || keysDown.contains(RIGHT)) {
     createHitZoneAndCheck(rightPlayer, 1, 0, 'd');
     drummer.setAnim(1);
+    sigils[0].setAnim(1);
   }
 }
 
