@@ -5,4 +5,4 @@ Help a band of magical elf musicians defend the holy crystal from an onslaught o
 
 # Intended usage:
 
-Select a song from the menu. Use WASD or the arrow keys to activate the corresponding sigils. Wait for the demon to be in the middle of the sigil to get the highest possible score.
+Select a song from the menu. Use WASD or the arrow keys to activate the corresponding sigils. Wait for the demon to be in the middle of the sigil to get the highest possible score. Press escape or P to pause the game.
